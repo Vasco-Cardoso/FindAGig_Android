@@ -1,0 +1,77 @@
+{
+  "project_info": {
+    "project_number": "682882098929",
+    "firebase_url": "https://getagig-baa4c.firebaseio.com",
+    "project_id": "getagig-baa4c",
+    "storage_bucket": "getagig-baa4c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:682882098929:android:48c0c6016bd731aae9eb50",
+        "android_client_info": {
+          "package_name": "com.example.findagig"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "682882098929-r531dgro09q6dobbkrmj9t03utptran9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6MUS2ipC6JeZz4Nr1eFlNuz14kds-BYU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "682882098929-r531dgro09q6dobbkrmj9t03utptran9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:682882098929:android:c6e6a08bf73de2c7e9eb50",
+        "android_client_info": {
+          "package_name": "com.findagig"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "682882098929-5a4k25u0ct4i86s9boqsq7ugtefcof5d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.findagig",
+            "certificate_hash": "eab4bf282548bfecfdd7188984817792a40dd306"
+          }
+        },
+        {
+          "client_id": "682882098929-r531dgro09q6dobbkrmj9t03utptran9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6MUS2ipC6JeZz4Nr1eFlNuz14kds-BYU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "682882098929-r531dgro09q6dobbkrmj9t03utptran9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
