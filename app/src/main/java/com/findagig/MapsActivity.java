@@ -39,6 +39,10 @@ import com.google.android.libraries.places.api.model.PlaceLikelihood;
 import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest;
 import com.google.android.libraries.places.api.net.FindCurrentPlaceResponse;
 import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Arrays;
 import java.util.List;
@@ -148,6 +152,30 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap map) {
         mMap = map;
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("gigs")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                if (!document.getBoolean("taken")) {
+                                    GeoPoint local = (GeoPoint) document.getData().get("local");
+                                    mMap.addMarker(new MarkerOptions()
+                                            .position( new LatLng(local.getLatitude(), local.getLongitude()))
+                                            .title(document.getData().get("name").toString()));
+                                    Log.d(TAG, document.getId() + " => " + document.getData().get("city") + ", " + document.getData().get("description") + ", lat " + local.getLatitude());
+                                }
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+
+
 
         // Use a custom info window adapter to handle multiple lines of text in the
         // info window contents.
