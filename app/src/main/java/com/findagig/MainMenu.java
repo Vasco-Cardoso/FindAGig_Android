@@ -37,17 +37,13 @@ public class MainMenu extends AppCompatActivity {
             Fragment selctedFragment = null;
 
             switch (menuItem.getItemId()){
-
                 case R.id.nav_home:
-
                     selctedFragment = new HomeFragment();
                     break;
                 case R.id.nav_history:
-
                     selctedFragment = new HistoryFragment();
                     break;
                 case R.id.nav_menu:
-
                     selctedFragment = new MenuFragment();
                     break;
             }
