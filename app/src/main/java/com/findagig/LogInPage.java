@@ -67,8 +67,6 @@ public class LogInPage extends AppCompatActivity {
         login_mail = findViewById(R.id.username);
         login_pass = findViewById(R.id.password);
 
-        System.out.println("Estou a dar login com: " + login_mail.getText().toString() + ", " + login_pass.getText().toString());
-
         // [START sign_in_with_email]
         mAuth.signInWithEmailAndPassword(login_mail.getText().toString(), login_pass.getText().toString())
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
