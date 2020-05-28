@@ -33,23 +33,32 @@ public class LogInPage extends AppCompatActivity {
         setContentView(R.layout.activity_log_in_page);
 
         mAuth = FirebaseAuth.getInstance();
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("gigs")
-            .get()
-            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                    if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            if (!document.getBoolean("taken")) {
-                                Log.d(TAG, document.getId() + " => " + document.getData().get("city") + ", " + document.getData().get("description") + ", " + document.getData().get("employer"));
+
+        if (mAuth.getCurrentUser() != null) {
+            Intent i = new Intent(getApplicationContext(), MainMenu.class);
+            startActivity(i);
+        }
+        else {
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            db.collection("gigs")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                if (!document.getBoolean("taken")) {
+                                    Log.d(TAG, document.getId() + " => " + document.getData().get("city") + ", " + document.getData().get("description") + ", " + document.getData().get("employer"));
+                                }
                             }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
                         }
-                    } else {
-                        Log.d(TAG, "Error getting documents: ", task.getException());
                     }
-                }
-            });
+                });
+        }
+
+
 
     }
 

@@ -60,7 +60,8 @@ public class HistoryFragment extends Fragment {
                             if (!document.getBoolean("taken")) {
                                 //Log.d(TAG, document.getId() + " => " + document.getData().get("city") + ", " + document.getData().get("description") + ", " + document.getData().get("employer"));
                                 Model m = new Model();
-                                m.setTitle(document.getData().get("name").toString());
+//                                m.setTitle(document.getData().get("name").toString());
+                                m.setTitle(document.getId().toString());
                                 m.setDescription(document.getData().get("description").toString());
                                 m.setImg(R.drawable.bookmark);
                                 models.add(m);
