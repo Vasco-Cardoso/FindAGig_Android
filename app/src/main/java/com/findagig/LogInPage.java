@@ -45,49 +45,45 @@ public class LogInPage extends AppCompatActivity {
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                if (!document.getBoolean("taken")) {
-                                    Log.d(TAG, document.getId() + " => " + document.getData().get("city") + ", " + document.getData().get("description") + ", " + document.getData().get("employer"));
-                                }
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            if (!document.getBoolean("taken")) {
+                                Log.d(TAG, document.getId() + " => " + document.getData().get("city") + ", " + document.getData().get("description") + ", " + document.getData().get("employer"));
                             }
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
                         }
+                    } else {
+                        Log.d(TAG, "Error getting documents: ", task.getException());
+                    }
                     }
                 });
         }
-
-
-
     }
 
     public void signIn(View view) {
-        System.out.println("--------------------->OU");
         login_mail = findViewById(R.id.username);
         login_pass = findViewById(R.id.password);
 
         // [START sign_in_with_email]
         mAuth.signInWithEmailAndPassword(login_mail.getText().toString(), login_pass.getText().toString())
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            Toast.makeText(LogInPage.this, "Authentication success.",
-                                    Toast.LENGTH_SHORT).show();
+            .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    // Sign in success, update UI with the signed-in user's information
+                    FirebaseUser user = mAuth.getCurrentUser();
+                    Toast.makeText(LogInPage.this, "Authentication success.",
+                            Toast.LENGTH_SHORT).show();
 
-                            Intent i = new Intent(getApplicationContext(), MainMenu.class);
-                            startActivity(i);
+                    Intent i = new Intent(getApplicationContext(), MainMenu.class);
+                    startActivity(i);
 
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Toast.makeText(LogInPage.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+                } else {
+                    // If sign in fails, display a message to the user.
+                    Toast.makeText(LogInPage.this, "Authentication failed.",
+                            Toast.LENGTH_SHORT).show();
+                }
+                }
+            });
         // [END sign_in_with_email]
     }
 
