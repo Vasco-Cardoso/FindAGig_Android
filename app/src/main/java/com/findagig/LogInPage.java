@@ -27,6 +27,7 @@ public class LogInPage extends AppCompatActivity {
 
     EditText login_mail;
     EditText login_pass;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,17 +35,19 @@ public class LogInPage extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-        if (mAuth.getCurrentUser() != null) {
-            Intent i = new Intent(getApplicationContext(), MainMenu.class);
-            startActivity(i);
-        }
-        else {
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
-            db.collection("gigs")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//        if (mAuth.getCurrentUser() != null) {
+////            Intent i = new Intent(getApplicationContext(), MainMenu.class);
+////            startActivity(i);
+////        }
+////        else {
+////
+////        }
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("gigs")
+            .get()
+            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             if (!document.getBoolean("taken")) {
@@ -54,9 +57,8 @@ public class LogInPage extends AppCompatActivity {
                     } else {
                         Log.d(TAG, "Error getting documents: ", task.getException());
                     }
-                    }
-                });
-        }
+                }
+            });
     }
 
     public void signIn(View view) {
@@ -87,4 +89,8 @@ public class LogInPage extends AppCompatActivity {
         // [END sign_in_with_email]
     }
 
+    public void onClick(View view) {
+        Intent i = new Intent(getApplicationContext(), Register.class);
+        startActivity(i);
+    }
 }

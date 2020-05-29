@@ -38,10 +38,10 @@ public class Register extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-//        login_mail = findViewById(R.id.);
-//        login_pass = findViewById(R.id.);
-//        user_name = findViewById(R.id.);
-//        register = findViewById(R.id.);
+        register_mail = findViewById(R.id.username);
+        register_pass = findViewById(R.id.password);
+        register_user_name = findViewById(R.id.nickname);
+        register = findViewById(R.id.register_btn);
         mAuth = FirebaseAuth.getInstance();
 
         register.setOnClickListener(new View.OnClickListener() {
@@ -50,8 +50,8 @@ public class Register extends AppCompatActivity {
                 if(register_mail != null
                         && register_mail.toString().contains("@")
                         && register_pass != null
-                        && register_pass.toString().length() > 6
-                ) {
+                        && register_pass.toString().length() > 6)
+                {
                     registerUser();
                 }
                 else {
