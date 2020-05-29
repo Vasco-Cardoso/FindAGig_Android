@@ -38,20 +38,21 @@ public class Register extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-//        login_mail = findViewById(R.id.);
-//        login_pass = findViewById(R.id.);
-//        user_name = findViewById(R.id.);
-//        register = findViewById(R.id.);
+        register_mail = findViewById(R.id.username);
+        register_pass = findViewById(R.id.password);
+        register_user_name = findViewById(R.id.nickname);
+        register = findViewById(R.id.register_btn);
         mAuth = FirebaseAuth.getInstance();
 
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(register_mail != null
-                        && register_mail.toString().contains("@")
-                        && register_pass != null
-                        && register_pass.toString().length() > 6
-                ) {
+                Log.d(TAG, "=> " + register_mail.getText().toString() + " -> " + register_pass.getText().toString());
+                if(register_mail.getText().toString() != null
+                        && register_mail.getText().toString().contains("@")
+                        && register_pass.getText().toString() != null
+                        && register_pass.getText().toString().length() > 6)
+                {
                     registerUser();
                 }
                 else {
@@ -65,7 +66,7 @@ public class Register extends AppCompatActivity {
     }
 
     public void registerUser() {
-        mAuth.createUserWithEmailAndPassword(register_mail.toString(), register_pass.toString())
+        mAuth.createUserWithEmailAndPassword(register_mail.getText().toString(), register_pass.getText().toString())
             .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
@@ -85,13 +86,14 @@ public class Register extends AppCompatActivity {
     }
 
     public void addUserRegistry() {
-        final FirebaseFirestore db = null;
+        final FirebaseFirestore db =  FirebaseFirestore.getInstance();
 
         Map<String, Object> user = new HashMap<>();
-        user.put("email", register_mail);
+        user.put("email", register_mail.getText().toString());
         user.put("image", "https://www.pavilionweb.com/wp-content/uploads/2017/03/man-300x300.png");
-        user.put("name", register_user_name);
-        user.put("password", register_pass);
+        user.put("name", register_user_name.getText().toString());
+        user.put("password", register_pass.getText().toString());
+        Log.d(TAG, "ADDDING THIS USER: " + user.toString());
 
         db.collection("users")
             .add(user)
