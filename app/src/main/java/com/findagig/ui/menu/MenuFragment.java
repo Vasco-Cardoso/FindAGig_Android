@@ -36,11 +36,10 @@ public class MenuFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.fragment_history, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_menu, container, false);
 
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView_MENU);
         mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 1));
-
 
         myAdapter = new MyAdapter(this.getContext(), getMyList());
         mRecyclerView.setAdapter(myAdapter);
@@ -51,18 +50,13 @@ public class MenuFragment extends Fragment {
     private ArrayList<Model> getMyList() {
         final ArrayList<Model> models = new ArrayList<>();
 
-        Model m = new Model();
-
         for(String opt : options){
-
+            Model m = new Model();
             m.setTitle(opt);
             m.setDescription("WIWI");
             m.setImg(R.drawable.bookmark);
             models.add(m);
         }
-
-        myAdapter.setModels(models);
-        mRecyclerView.setAdapter(myAdapter);
 
         return models;
     }
