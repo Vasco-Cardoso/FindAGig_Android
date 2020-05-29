@@ -18,6 +18,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -71,6 +72,7 @@ public class Register extends AppCompatActivity {
                     if(task.isSuccessful()) {
                         Toast.makeText(Register.this, "Register success.",
                                 Toast.LENGTH_SHORT).show();
+                        addUserRegistry();
                     }
                     else {
                         Toast.makeText(Register.this, "Register failed.",
@@ -91,12 +93,12 @@ public class Register extends AppCompatActivity {
         user.put("name", register_user_name);
         user.put("password", register_pass);
 
-        db.collection("users").document()
-            .set(user)
-            .addOnSuccessListener(new OnSuccessListener<Void>() {
+        db.collection("users")
+            .add(user)
+            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                 @Override
-                public void onSuccess(Void aVoid) {
-                    Log.d(TAG, "DocumentSnapshot successfully written!");
+                public void onSuccess(DocumentReference documentReference) {
+                    Log.d(TAG, "DocumentSnapshot successfully written!" + documentReference.getId() );
                 }
             })
             .addOnFailureListener(new OnFailureListener() {
