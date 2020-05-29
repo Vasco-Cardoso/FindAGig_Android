@@ -51,6 +51,7 @@ public class MenuFragment extends Fragment {
         final ArrayList<Model> models = new ArrayList<>();
 
         for(String opt : options){
+
             Model m = new Model();
             m.setTitle(opt);
             m.setDescription("WIWI");
