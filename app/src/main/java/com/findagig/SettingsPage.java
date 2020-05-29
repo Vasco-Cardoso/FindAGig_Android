@@ -62,23 +62,23 @@ public class SettingsPage extends AppCompatActivity {
             .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                    if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            if (document.getId().equals(userUID)) {
-                                name = document.getData().get("name").toString();
-                                email = document.getData().get("email").toString();
-                                imagePath = document.getData().get("image").toString();
-                                try {
-                                    getImage(userUID);
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                                Log.d(TAG, document.getId() + " => " + name + ", " + email + ", " + imagePath);
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        if (document.getId().equals(userUID)) {
+                            name = document.getData().get("name").toString();
+                            email = document.getData().get("email").toString();
+                            imagePath = document.getData().get("image").toString();
+                            try {
+                                getImage(userUID);
+                            } catch (IOException e) {
+                                e.printStackTrace();
                             }
+                            Log.d(TAG, document.getId() + " => " + name + ", " + email + ", " + imagePath);
                         }
-                    } else {
-                        Log.d(TAG, "Error getting documents: ", task.getException());
                     }
+                } else {
+                    Log.d(TAG, "Error getting documents: ", task.getException());
+                }
                 }
             });
     }
@@ -95,9 +95,6 @@ public class SettingsPage extends AppCompatActivity {
         GlideApp.with(this)
                 .load(pathReference)
                 .into(imageView);
-
-
-
     }
 
 }
