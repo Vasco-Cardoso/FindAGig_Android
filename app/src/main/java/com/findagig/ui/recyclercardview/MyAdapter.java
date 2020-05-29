@@ -14,8 +14,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.findagig.Description;
 import com.findagig.MapsActivity;
 import com.findagig.R;
+import com.findagig.SettingsPage;
 import com.google.common.collect.Maps;
 
+import java.nio.channels.SeekableByteChannel;
 import java.util.ArrayList;
 
 public class MyAdapter extends RecyclerView.Adapter<MyHolder> {
@@ -58,7 +60,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyHolder> {
                 dataBundle.putString("title", gTitle);
                 dataBundle.putString("desc", gDesc);
 
-                Intent intent = new Intent(c, Description.class);
+                Intent intent = new Intent(c, SettingsPage.class);
                 intent.putExtra("id", gTitle);
                 c.startActivity(intent);
             }

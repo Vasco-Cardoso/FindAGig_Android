@@ -19,6 +19,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -55,7 +56,7 @@ public class Description extends AppCompatActivity {
         if (bundle != null) {
             Log.d(TAG, "=> Vieram valores no bundle");
             documentID = bundle.getString("id");
-            getInfo(bundle.getString("id"));
+            getInfo(documentID);
         }
         else {
             gigName.setText("Error");
@@ -117,6 +118,7 @@ public class Description extends AppCompatActivity {
                             if (!document.getBoolean("taken"))
                                 if (document.getId().equals(id)) {
                                     Log.d(TAG, document.getId() + " => " + document.getData().get("city") + ", " + document.getData().get("description") + ", " + document.getData().get("employer"));
+
                                     gigName.setText(document.getData().get("name").toString());
                                     gigEmployer.setText(document.getData().get("employer").toString());
                                     gigDesc.setText(document.getData().get("description").toString());
