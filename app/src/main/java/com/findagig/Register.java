@@ -73,7 +73,7 @@ public class Register extends AppCompatActivity {
                     if(task.isSuccessful()) {
                         Toast.makeText(Register.this, "Register success.",
                                 Toast.LENGTH_SHORT).show();
-                        addUserRegistry();
+                        logInUser();
                     }
                     else {
                         Toast.makeText(Register.this, "Register failed.",
@@ -83,6 +83,27 @@ public class Register extends AppCompatActivity {
             });
 
         // [END sign_in_with_email]
+    }
+
+    public void logInUser() {
+        mAuth.signInWithEmailAndPassword(register_mail.getText().toString(), register_pass.getText().toString())
+            .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if (task.isSuccessful()) {
+                        // Sign in success, update UI with the signed-in user's information
+                        Toast.makeText(Register.this, "Authentication success.",
+                                Toast.LENGTH_SHORT).show();
+
+                        addUserRegistry();
+
+                    } else {
+                        // If sign in fails, display a message to the user.
+                        Toast.makeText(Register.this, "Authentication failed.",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
     }
 
     public void addUserRegistry() {
@@ -96,18 +117,22 @@ public class Register extends AppCompatActivity {
         Log.d(TAG, "ADDDING THIS USER: " + user.toString());
 
         db.collection("users")
-            .add(user)
-            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+            .document(mAuth.getCurrentUser().getUid())
+            .set(user)
+            .addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
-                public void onSuccess(DocumentReference documentReference) {
-                    Log.d(TAG, "DocumentSnapshot successfully written!" + documentReference.getId() );
+                public void onSuccess(Void aVoid) {
+                    Log.d(TAG, "DocumentSnapshot successfully written!");
+
+                    Intent i = new Intent(getApplicationContext(), MainMenu.class);
+                    startActivity(i);
                 }
             })
-            .addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Log.w(TAG, "Error writing document", e);
-                }
-            });
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error writing document", e);
+                    }
+                });
     }
 }

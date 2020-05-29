@@ -15,6 +15,7 @@ import com.findagig.ui.history.HistoryFragment;
 import com.findagig.ui.home.HomeFragment;
 import com.findagig.ui.menu.MenuFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class MainMenu extends AppCompatActivity {
 
@@ -34,21 +35,22 @@ public class MainMenu extends AppCompatActivity {
     private  BottomNavigationView.OnNavigationItemSelectedListener navListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-            Fragment selctedFragment = null;
+            Fragment selectedFragment = null;
 
             switch (menuItem.getItemId()){
                 case R.id.nav_home:
-                    selctedFragment = new HomeFragment();
+                    selectedFragment = new HomeFragment();
                     break;
                 case R.id.nav_history:
-                    selctedFragment = new HistoryFragment();
+                    selectedFragment = new HistoryFragment();
                     break;
                 case R.id.nav_menu:
-                    selctedFragment = new MenuFragment();
+                    selectedFragment = new MenuFragment();
                     break;
             }
 
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selctedFragment).commit();
+            assert selectedFragment != null;
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
             return true;
         }
     };

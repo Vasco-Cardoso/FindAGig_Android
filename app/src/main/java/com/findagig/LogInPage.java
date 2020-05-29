@@ -35,30 +35,14 @@ public class LogInPage extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-//        if (mAuth.getCurrentUser() != null) {
-////            Intent i = new Intent(getApplicationContext(), MainMenu.class);
-////            startActivity(i);
-////        }
-////        else {
-////
-////        }
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("gigs")
-            .get()
-            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                    if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            if (!document.getBoolean("taken")) {
-                                Log.d(TAG, document.getId() + " => " + document.getData().get("city") + ", " + document.getData().get("description") + ", " + document.getData().get("employer"));
-                            }
-                        }
-                    } else {
-                        Log.d(TAG, "Error getting documents: ", task.getException());
-                    }
-                }
-            });
+        if (mAuth.getCurrentUser() != null) {
+            Intent i = new Intent(getApplicationContext(), MainMenu.class);
+            startActivity(i);
+        }
+        else {
+
+        }
+
     }
 
     public void signIn(View view) {

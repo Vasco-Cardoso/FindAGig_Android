@@ -29,11 +29,19 @@
             </TextView>
 
             <ImageView
+                android:onClick="clickCamera"
                 android:id="@+id/imageView_settings"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_below="@id/welcome_text"
                 app:srcCompat="@drawable/quantum_ic_clear_grey600_24" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/imageView_settings">
+
+            </Button>
 
         </RelativeLayout>
     </LinearLayout>
