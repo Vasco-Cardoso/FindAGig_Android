@@ -33,6 +33,8 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -40,6 +42,9 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 import com.findagig.MyAppGlideModule;
 import com.google.firebase.storage.UploadTask;
@@ -54,6 +59,12 @@ public class SettingsPage extends AppCompatActivity {
     // Tag
     private static final String TAG = "Settings";
 
+    // Elements from XML
+    EditText email_et;
+    EditText password_et;
+    EditText username_et;
+    Button saveButton;
+
     // Firebase variables
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
@@ -61,6 +72,7 @@ public class SettingsPage extends AppCompatActivity {
 
     // User variables to be set
     private String email;
+    private String password;
     private String imagePath;
     private String name;
     private String userUID;
@@ -80,6 +92,12 @@ public class SettingsPage extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         storage  = FirebaseStorage.getInstance();
 
+        // Initializing edit texts and buttom
+        email_et = findViewById(R.id.username);
+        password_et = findViewById(R.id.password);
+        username_et = findViewById(R.id.nickname);
+        saveButton = findViewById(R.id.submit_btn);
+
         if (mAuth.getCurrentUser() != null) {
             userUID = mAuth.getCurrentUser().getUid();
             getUserInfo(userUID);
@@ -87,6 +105,13 @@ public class SettingsPage extends AppCompatActivity {
         else {
             Log.d(TAG, "Error getting user.");
         }
+
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveUserSettings();
+            }
+        });
     }
 
     private void getImage(String userUID) throws IOException {
@@ -103,7 +128,6 @@ public class SettingsPage extends AppCompatActivity {
                 .into(imageView);
     }
 
-
     private void getUserInfo(final String userUID) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("users")
@@ -116,12 +140,18 @@ public class SettingsPage extends AppCompatActivity {
                         if (document.getId().equals(userUID)) {
                             name = document.getData().get("name").toString();
                             email = document.getData().get("email").toString();
+                            password = document.getData().get("password").toString();
                             imagePath = document.getData().get("image").toString();
-                            try {
-                                getImage(userUID);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+
+                            email_et.setText(email);
+                            username_et.setText(name);
+                            password_et.setText(password);
+
+//                            try {
+//                                getImage(userUID);
+//                            } catch (IOException e) {
+//                                e.printStackTrace();
+//                            }
                             Log.d(TAG, document.getId() + " => " + name + ", " + email + ", " + imagePath);
                         }
                     }
@@ -138,7 +168,6 @@ public class SettingsPage extends AppCompatActivity {
         }else {
             dispatchTakePictureIntent();
         }
-
     }
 
     @Override
@@ -151,8 +180,6 @@ public class SettingsPage extends AppCompatActivity {
             }
         }
     }
-
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -216,13 +243,11 @@ public class SettingsPage extends AppCompatActivity {
 
     }
 
-
     private String getFileExt(Uri contentUri) {
         ContentResolver c = getContentResolver();
         MimeTypeMap mime = MimeTypeMap.getSingleton();
         return mime.getExtensionFromMimeType(c.getType(contentUri));
     }
-
 
     private File createImageFile() throws IOException {
         // Create an image file name
@@ -240,7 +265,6 @@ public class SettingsPage extends AppCompatActivity {
         currentPhotoPath = image.getAbsolutePath();
         return image;
     }
-
 
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -266,5 +290,37 @@ public class SettingsPage extends AppCompatActivity {
 
     public void clickCamera(View view) {
         askCameraPermissions();
+    }
+
+    public void saveUserSettings() {
+        final FirebaseFirestore db =  FirebaseFirestore.getInstance();
+
+        Map<String, Object> user = new HashMap<>();
+        user.put("email", email_et.getText().toString());
+        user.put("image", "https://www.pavilionweb.com/wp-content/uploads/2017/03/man-300x300.png");
+        user.put("name", username_et.getText().toString());
+        user.put("password", password_et.getText().toString());
+        Log.d(TAG, "ADDDING THIS USER: " + user.toString());
+
+        db.collection("users")
+                .document(mAuth.getCurrentUser().getUid())
+                .set(user)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully written!");
+                        Toast.makeText(SettingsPage.this, "User information was updated.",
+                                Toast.LENGTH_SHORT).show();
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error writing document", e);
+                        Toast.makeText(SettingsPage.this, "User information was not updated, check you connection!",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 }

@@ -12,10 +12,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.findagig.Description;
+import com.findagig.LogInPage;
 import com.findagig.MapsActivity;
 import com.findagig.R;
 import com.findagig.SettingsPage;
+import com.findagig.ui.QRCode.QRCode;
 import com.google.common.collect.Maps;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.nio.channels.SeekableByteChannel;
 import java.util.ArrayList;
@@ -60,9 +63,40 @@ public class MyAdapter extends RecyclerView.Adapter<MyHolder> {
                 dataBundle.putString("title", gTitle);
                 dataBundle.putString("desc", gDesc);
 
-                Intent intent = new Intent(c, SettingsPage.class);
-                intent.putExtra("id", gTitle);
-                c.startActivity(intent);
+                if(gTitle.equals("Settings")) {
+                    Intent intent = new Intent(c, SettingsPage.class);
+                    c.startActivity(intent);
+
+                }
+                else if (gTitle.equals("QRCode"))
+                {
+                    Intent intent = new Intent(c, QRCode.class);
+                    c.startActivity(intent);
+
+                }
+                else if (gTitle.equals("Logout"))
+                {
+                    FirebaseAuth mAuth = FirebaseAuth.getInstance();
+                    mAuth.signOut();
+                    Intent intent = new Intent(c, LogInPage.class);
+                    c.startActivity(intent);
+                }
+                else if (gTitle.equals("Map"))
+                {
+                    Intent intent = new Intent(c, MapsActivity.class);
+                    c.startActivity(intent);
+                }
+                else if (gTitle.equals("All gigs"))
+                {
+
+                }
+                else {
+                    Intent intent = new Intent(c, Description.class);
+                    intent.putExtra("id", gTitle);
+                    c.startActivity(intent);
+                }
+
+
             }
         });
     }
