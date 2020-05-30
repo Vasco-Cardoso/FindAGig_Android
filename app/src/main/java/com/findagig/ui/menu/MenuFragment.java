@@ -14,7 +14,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.findagig.R;
 import com.findagig.ui.recyclercardview.Model;
+import com.findagig.ui.recyclercardview.ModelForMenu;
 import com.findagig.ui.recyclercardview.MyAdapter;
+import com.findagig.ui.recyclercardview.MyAdapterMenu;
 
 import java.util.ArrayList;
 
@@ -22,7 +24,7 @@ public class MenuFragment extends Fragment {
 
     private static final String TAG = "MenuFragment";
     RecyclerView mRecyclerView;
-    MyAdapter myAdapter;
+    MyAdapterMenu myAdapter;
 
     String[] options = new String[]{"All gigs","Logout","Settings", "Map", "QRCode", "History" };
 
@@ -33,21 +35,21 @@ public class MenuFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_menu, container, false);
 
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView_MENU);
-        mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 1));
+        mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
 
-        myAdapter = new MyAdapter(this.getContext(), getMyList());
+        myAdapter = new MyAdapterMenu(this.getContext(), getMyList());
         mRecyclerView.setAdapter(myAdapter);
 
         return rootView;
     }
 
-    private ArrayList<Model> getMyList() {
-        final ArrayList<Model> models = new ArrayList<>();
+    private ArrayList<ModelForMenu> getMyList() {
+        final ArrayList<ModelForMenu> models = new ArrayList<>();
 
         for(String opt : options) {
-            Model m = new Model();
+            ModelForMenu m = new ModelForMenu();
             m.setTitle(opt);
-            m.setDescription("");
+
             m.setImg(R.drawable.bookmark);
             models.add(m);
         }

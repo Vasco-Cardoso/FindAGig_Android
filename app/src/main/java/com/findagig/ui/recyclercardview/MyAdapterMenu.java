@@ -2,13 +2,11 @@ package com.findagig.ui.recyclercardview;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.findagig.AllGigs;
@@ -19,56 +17,54 @@ import com.findagig.R;
 import com.findagig.SettingsPage;
 import com.findagig.ui.QRCode.QRCode;
 import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.ArrayList;
 
-public class MyAdapter extends RecyclerView.Adapter<MyHolder> {
+public class MyAdapterMenu extends RecyclerView.Adapter<MyHolderMenu> {
     Context c;
-    ArrayList<Model> models;
+    ArrayList<ModelForMenu> models;
 
-    public MyAdapter(Context c, ArrayList<Model> models) {
+    public MyAdapterMenu(Context c, ArrayList<ModelForMenu> models) {
         this.c = c;
         this.models = models;
     }
 
-    public void setModels(ArrayList<Model> models) {
+    public void setModels(ArrayList<ModelForMenu> models) {
         this.models = models;
     }
 
     @NonNull
     @Override
-    public MyHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card, parent, false);
+    public MyHolderMenu onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card2, parent, false);
 
-        return new MyHolder(view);
+        return new MyHolderMenu(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final MyHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final MyHolderMenu holder, final int position) {
         holder.mTitle.setText(models.get(position).getTitle());
-        holder.mdes.setText(models.get(position).getDescription());
         holder.mImage.setImageResource(models.get(position).getImg());
 
         holder.setItemClickListener(new ItemClickListener() {
             @Override
             public void onItemClickListener(View v, int pos) {
                 String gTitle = models.get(position).getTitle();
-                String gDesc = models.get(position).getDescription();
 
                 if(gTitle.equals("Settings")) {
                     Intent intent = new Intent(c, SettingsPage.class);
                     c.startActivity(intent);
-
                 }
                 else if (gTitle.equals("QRCode"))
                 {
                     Intent intent = new Intent(c, QRCode.class);
                     c.startActivity(intent);
-
                 }
                 else if (gTitle.equals("Logout"))
                 {
                     FirebaseAuth mAuth = FirebaseAuth.getInstance();
                     mAuth.signOut();
+
                     Intent intent = new Intent(c, LogInPage.class);
                     c.startActivity(intent);
                 }
@@ -87,8 +83,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyHolder> {
                     intent.putExtra("id", gTitle);
                     c.startActivity(intent);
                 }
-
-
             }
         });
     }
