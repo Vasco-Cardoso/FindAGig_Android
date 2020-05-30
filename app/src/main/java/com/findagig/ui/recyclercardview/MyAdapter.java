@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.findagig.AllGigs;
 import com.findagig.Description;
 import com.findagig.LogInPage;
 import com.findagig.MapsActivity;
@@ -88,7 +89,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyHolder> {
                 }
                 else if (gTitle.equals("All gigs"))
                 {
-
+                    Intent intent = new Intent(c, AllGigs.class);
+                    c.startActivity(intent);
                 }
                 else {
                     Intent intent = new Intent(c, Description.class);

@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentActivity;
 import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
@@ -46,10 +47,13 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.Phaser;
 
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener {
+    private HashMap<String, String> map_id = new HashMap<>();
 
     private static final String TAG = MapsActivity.class.getSimpleName();
     private GoogleMap mMap;
@@ -168,10 +172,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 if (!document.getBoolean("taken")) {
                                     GeoPoint local = (GeoPoint) document.getData().get("local");
+                                    map_id.put(document.getData().get("name").toString(), document.getId().toString());
+                                    assert local != null;
                                     mMap.addMarker(new MarkerOptions()
                                             .position( new LatLng(local.getLatitude(), local.getLongitude()))
-                                            .title(document.getData().get("name").toString()));
-                                    Log.d(TAG, document.getId() + " => " + document.getData().get("city") + ", " + document.getData().get("description") + ", lat " + local.getLatitude());
+                                            .title(document.getData().get("name").toString())
+
+                                    );
+
                                 }
                             }
                         } else {
@@ -180,6 +188,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     }
                 });
 
+        mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                Log.d("MAP", "=> CLIQUEI NO MARKER" + marker.getTitle());
+                Intent intent = new Intent(MapsActivity.this, Description.class);
+                intent.putExtra("id", map_id.get( marker.getTitle() ) );
+                startActivity(intent);
+            }
+        });
 
 
         // Use a custom info window adapter to handle multiple lines of text in the
@@ -426,6 +443,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         } catch (SecurityException e)  {
             Log.e("Exception: %s", e.getMessage());
+        }
+    }
+
+
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        if (marker.equals(marker))
+        {
+            Log.d("MAP", "=> CLIQUEI NO MARKER" + marker.getTitle());
         }
     }
 }

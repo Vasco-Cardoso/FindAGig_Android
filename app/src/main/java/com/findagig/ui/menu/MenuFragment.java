@@ -44,8 +44,7 @@ public class MenuFragment extends Fragment {
     private ArrayList<Model> getMyList() {
         final ArrayList<Model> models = new ArrayList<>();
 
-        for(String opt : options){
-
+        for(String opt : options) {
             Model m = new Model();
             m.setTitle(opt);
             m.setDescription("");
