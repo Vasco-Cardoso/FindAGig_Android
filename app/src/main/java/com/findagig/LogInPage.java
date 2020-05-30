@@ -46,6 +46,8 @@ public class LogInPage extends AppCompatActivity {
     }
 
     public void signIn(View view) {
+        Toast.makeText(getApplicationContext(), "Logging in...", Toast.LENGTH_SHORT).show();
+
         login_mail = findViewById(R.id.username);
         login_pass = findViewById(R.id.password);
 

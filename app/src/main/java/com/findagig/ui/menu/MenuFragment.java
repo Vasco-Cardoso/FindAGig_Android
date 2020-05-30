@@ -15,11 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.findagig.R;
 import com.findagig.ui.recyclercardview.Model;
 import com.findagig.ui.recyclercardview.MyAdapter;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
@@ -29,8 +24,7 @@ public class MenuFragment extends Fragment {
     RecyclerView mRecyclerView;
     MyAdapter myAdapter;
 
-    GridLayoutManager grid = new GridLayoutManager(getActivity(), 1);
-    String[] options = new String[]{"Settings", "QRCode", "Map", "History"};
+    String[] options = new String[]{"All gigs","Logout","Settings", "Map", "QRCode", "History" };
 
     @Nullable
     @Override
@@ -54,7 +48,7 @@ public class MenuFragment extends Fragment {
 
             Model m = new Model();
             m.setTitle(opt);
-            m.setDescription("WIWI");
+            m.setDescription("");
             m.setImg(R.drawable.bookmark);
             models.add(m);
         }

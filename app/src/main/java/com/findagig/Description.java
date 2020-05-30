@@ -32,6 +32,7 @@ public class Description extends AppCompatActivity {
     TextView gigEmployer;
     TextView gigDesc;
     TextView gigReward;
+    TextView gigContact;
 
     Button seeMapButton;
     Button applyButton;
@@ -46,6 +47,7 @@ public class Description extends AppCompatActivity {
         gigEmployer = findViewById(R.id.gig_employer);
         gigDesc = findViewById(R.id.gig_desc);
         gigReward = findViewById(R.id.gig_reward);
+        gigContact = findViewById(R.id.gig_contact);
 
         // buttons assigned to the respective ID
         seeMapButton = findViewById(R.id.btn_map);
@@ -54,7 +56,6 @@ public class Description extends AppCompatActivity {
         // Get the ID value so we can gather the document from Firestore
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            Log.d(TAG, "=> Vieram valores no bundle");
             documentID = bundle.getString("id");
             getInfo(documentID);
         }
@@ -73,6 +74,7 @@ public class Description extends AppCompatActivity {
         applyButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Log.d(TAG, "=> Click no applyButton");
+                FirebaseAuth mAuth = FirebaseAuth.getInstance();;
 
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -97,6 +99,21 @@ public class Description extends AppCompatActivity {
                         }
                     });
 
+
+                db.collection("gigs").document(documentID)
+                        .update("employee", mAuth.getCurrentUser().getUid().toString())
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d(TAG, "DocumentSnapshot successfully written!");
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w(TAG, "Error writing document", e);
+                            }
+                        });
             }
         });
 
@@ -113,22 +130,22 @@ public class Description extends AppCompatActivity {
             .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                    if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            if (!document.getBoolean("taken"))
-                                if (document.getId().equals(id)) {
-                                    Log.d(TAG, document.getId() + " => " + document.getData().get("city") + ", " + document.getData().get("description") + ", " + document.getData().get("employer"));
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        if (document.getId().equals(id)) {
+                            Log.d(TAG, document.getId() + " => " + document.getData().get("city") + ", " + document.getData().get("description") + ", " + document.getData().get("employer"));
 
-                                    gigName.setText(document.getData().get("name").toString());
-                                    gigEmployer.setText(document.getData().get("employer").toString());
-                                    gigDesc.setText(document.getData().get("description").toString());
-                                    gigReward.setText(document.getData().get("reward").toString());
-                                }
+                            gigName.setText(document.getData().get("name").toString());
+                            gigEmployer.setText(document.getData().get("employer").toString());
+                            gigDesc.setText(document.getData().get("description").toString());
+                            gigContact.setText(document.getData().get("contact").toString());
+                            gigReward.setText(document.getData().get("reward").toString() + " credits.");
                         }
-
-                    } else {
-                        Log.d(TAG, "Error getting documents: ", task.getException());
                     }
+
+                } else {
+                    Log.d(TAG, "Error getting documents: ", task.getException());
+                }
                 }
             });
     }
