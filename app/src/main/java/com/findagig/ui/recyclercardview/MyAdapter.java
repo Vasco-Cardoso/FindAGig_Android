@@ -3,6 +3,7 @@ package com.findagig.ui.recyclercardview;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,10 +19,17 @@ import com.findagig.MapsActivity;
 import com.findagig.R;
 import com.findagig.SettingsPage;
 import com.findagig.ui.QRCode.QRCode;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
 import java.util.ArrayList;
 
 public class MyAdapter extends RecyclerView.Adapter<MyHolder> {
+    private static final String TAG = "MyAdapter";
     Context c;
     ArrayList<Model> models;
 
@@ -54,16 +62,29 @@ public class MyAdapter extends RecyclerView.Adapter<MyHolder> {
                 String gTitle = models.get(position).getTitle();
                 String gDesc = models.get(position).getDescription();
 
-                if(gTitle.equals("Settings")) {
-                    Intent intent = new Intent(c, SettingsPage.class);
+                if (gTitle.equals("All gigs"))
+                {
+                    Intent intent = new Intent(c, AllGigs.class);
                     c.startActivity(intent);
-
+                }
+                else if (gTitle.equals("Map"))
+                {
+                    Intent intent = new Intent(c, MapsActivity.class);
+                    c.startActivity(intent);
                 }
                 else if (gTitle.equals("QRCode"))
                 {
                     Intent intent = new Intent(c, QRCode.class);
                     c.startActivity(intent);
-
+                }
+                else if (gTitle.equals("History"))
+                {
+                    Intent intent = new Intent(c, QRCode.class);
+                    c.startActivity(intent);
+                }
+                else if(gTitle.equals("Settings")) {
+                    Intent intent = new Intent(c, SettingsPage.class);
+                    c.startActivity(intent);
                 }
                 else if (gTitle.equals("Logout"))
                 {
@@ -72,25 +93,49 @@ public class MyAdapter extends RecyclerView.Adapter<MyHolder> {
                     Intent intent = new Intent(c, LogInPage.class);
                     c.startActivity(intent);
                 }
-                else if (gTitle.equals("Map"))
-                {
-                    Intent intent = new Intent(c, MapsActivity.class);
-                    c.startActivity(intent);
-                }
-                else if (gTitle.equals("All gigs"))
-                {
-                    Intent intent = new Intent(c, AllGigs.class);
-                    c.startActivity(intent);
-                }
                 else {
-                    Intent intent = new Intent(c, Description.class);
-                    intent.putExtra("id", gTitle);
-                    c.startActivity(intent);
+                    getIdFromName(gTitle);
                 }
 
 
             }
         });
+    }
+
+    private void getIdFromName(final String gTitle) {
+        final String[] id = new String[1];
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection("gigs")
+            .get()
+            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        Log.d(TAG, "=> Comparando: " +document.getData().get("name") + " com " + gTitle);
+
+                        if(document.getData().get("name").toString().equals(gTitle)) {
+                            id[0] = document.getId();
+                            Log.d(TAG, "=> ID na func: " + id[0]);
+
+                            Intent intent = new Intent(c, Description.class);
+                            intent.putExtra("id", id[0]);
+                            c.startActivity(intent);
+
+                            break;
+                        }
+                    }
+
+                } else {
+                    Log.d(TAG, "Error getting documents: ", task.getException());
+                }
+                }
+            });
+
+
+
     }
 
     @Override

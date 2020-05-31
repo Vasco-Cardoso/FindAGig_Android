@@ -10,10 +10,10 @@
         android:id="@+id/WelcomeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
+        android:layout_marginStart="20dp"
         android:layout_marginLeft="30dp"
         android:layout_marginTop="30dp"
-        android:text="Welcome"
+        android:text="FindAGig"
         android:textColor="#000"
         android:textSize="75sp"
         android:textStyle="bold"
@@ -22,10 +22,10 @@
 
     <TextView
         android:id="@+id/PointText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="."
+        android:layout_width="27dp"
+        android:layout_height="98dp"
         android:layout_marginTop="30dp"
+        android:text="."
         android:textColor="#ffd700"
         android:textSize="80sp"
         android:textStyle="bold"
@@ -44,7 +44,7 @@
         app:layout_constraintTop_toBottomOf="@+id/WelcomeText"/>
 
     <TextView
-        android:id="@+id/name_menu"
+        android:id="@+id/name_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Name"
@@ -55,14 +55,14 @@
         android:layout_marginTop="20dp"/>
 
     <TextView
-        android:id="@+id/wallet_menu"
+        android:id="@+id/wallet_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Wallet: "
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/name_menu"
+        app:layout_constraintTop_toBottomOf="@id/name_value"
         android:layout_marginTop="5dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -72,16 +72,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/wallet_menu"
+        app:layout_constraintTop_toBottomOf="@id/wallet_value"
         android:layout_marginTop="25dp"/>
 
-    <TextView
-        android:id="@+id/wallet_value"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:text="Value"
-        app:layout_constraintStart_toEndOf="@+id/wallet_menu"
-        app:layout_constraintTop_toBottomOf="@id/name_menu" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

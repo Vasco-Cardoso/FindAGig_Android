@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -27,6 +28,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 public class Description extends AppCompatActivity {
     private static final String TAG = "Description";
     private String documentID = null;
+    private int wallet = 0;
+    private int valueOfGig = 0;
 
     TextView gigName;
     TextView gigEmployer;
@@ -57,6 +60,8 @@ public class Description extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             documentID = bundle.getString("id");
+            Log.d(TAG, "=> Id => " + documentID);
+
             getInfo(documentID);
         }
         else {
@@ -72,52 +77,118 @@ public class Description extends AppCompatActivity {
         });
 
         applyButton.setOnClickListener(new View.OnClickListener() {
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            FirebaseAuth mAuth = FirebaseAuth.getInstance();
+
             public void onClick(View v) {
-                Log.d(TAG, "=> Click no applyButton");
-                FirebaseAuth mAuth = FirebaseAuth.getInstance();;
+                String buttonText = applyButton.getText().toString();
 
-                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                if (buttonText.equals("Complete gig!")) {
 
-                db.collection("gigs").document(documentID)
-                    .update("taken", true)
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            Log.d(TAG, "DocumentSnapshot successfully written!");
+                    final String userUID = mAuth.getCurrentUser().getUid();
 
-                            Toast.makeText(Description.this, "You successfully applied to the job.",
-                                    Toast.LENGTH_SHORT).show();
+                    db.collection("users")
+                            .get()
+                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        for (QueryDocumentSnapshot document : task.getResult()) {
+                                            if (document.getId().equals(userUID)) {
+                                                wallet = Integer.valueOf(document.getData().get("wallet").toString());
+                                                Log.d(TAG, "Valor da wallet é de : " + wallet);
+                                                break;
+                                            }
+                                        }
+                                    } else {
+                                        Log.d(TAG, "Error getting documents: ", task.getException());
+                                    }
+                                }
+                            });
 
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.w(TAG, "Error writing document", e);
-                            Toast.makeText(Description.this, "Error writing document.",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                    db.collection("users").document(userUID)
+                            .update("wallet", wallet + valueOfGig)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Log.d(TAG, "You successfully updated your wallet!");
+
+                                    Toast.makeText(Description.this, "You successfully updated your wallet.",
+                                            Toast.LENGTH_SHORT).show();
+
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.w(TAG, "Error writing document", e);
+                                    Toast.makeText(Description.this, "Error writing document [wallet].",
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                            });
+
+                    db.collection("gigs").document(documentID)
+                            .update("completed", true)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Log.d(TAG, "DocumentSnapshot successfully written!");
+
+                                    Toast.makeText(Description.this, "You successfully applied to the job.",
+                                            Toast.LENGTH_SHORT).show();
+
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.w(TAG, "Error writing document", e);
+                                    Toast.makeText(Description.this, "Error writing document.",
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                }
+                else {
+
+                    db.collection("gigs").document(documentID)
+                            .update("taken", true)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Log.d(TAG, "DocumentSnapshot successfully written!");
+
+                                    Toast.makeText(Description.this, "You successfully applied to the job.",
+                                            Toast.LENGTH_SHORT).show();
+
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.w(TAG, "Error writing document", e);
+                                    Toast.makeText(Description.this, "Error writing document.",
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                            });
 
 
-                db.collection("gigs").document(documentID)
-                        .update("employee", mAuth.getCurrentUser().getUid().toString())
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                Log.d(TAG, "DocumentSnapshot successfully written!");
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.w(TAG, "Error writing document", e);
-                            }
-                        });
+                    db.collection("gigs").document(documentID)
+                            .update("employee", mAuth.getCurrentUser().getUid().toString())
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Log.d(TAG, "DocumentSnapshot successfully written!");
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.w(TAG, "Error writing document", e);
+                                }
+                            });
+                }
             }
         });
-
-
 
     }
 
@@ -134,12 +205,20 @@ public class Description extends AppCompatActivity {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         if (document.getId().equals(id)) {
                             Log.d(TAG, document.getId() + " => " + document.getData().get("city") + ", " + document.getData().get("description") + ", " + document.getData().get("employer"));
-
+                            valueOfGig = Integer.valueOf(document.getData().get("reward").toString());
                             gigName.setText(document.getData().get("name").toString());
                             gigEmployer.setText(document.getData().get("employer").toString());
                             gigDesc.setText(document.getData().get("description").toString());
                             gigContact.setText(document.getData().get("contact").toString());
                             gigReward.setText(document.getData().get("reward").toString() + " credits.");
+
+                            if(document.getBoolean("taken")) {
+                                applyButton.setText("Complete gig!");
+                                applyButton.setBackgroundColor(0xFF00FF00);
+                            }
+
+                            break;
+
                         }
                     }
 

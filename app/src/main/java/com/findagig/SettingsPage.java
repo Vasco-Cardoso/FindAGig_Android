@@ -75,6 +75,7 @@ public class SettingsPage extends AppCompatActivity {
     private String password;
     private String imagePath;
     private String name;
+    private String wallet;
     private String userUID;
     ImageView imageView;
 
@@ -142,6 +143,7 @@ public class SettingsPage extends AppCompatActivity {
                             email = document.getData().get("email").toString();
                             password = document.getData().get("password").toString();
                             imagePath = document.getData().get("image").toString();
+                            wallet = document.getData().get("wallet").toString();
 
                             email_et.setText(email);
                             username_et.setText(name);
@@ -300,6 +302,7 @@ public class SettingsPage extends AppCompatActivity {
         user.put("image", "https://www.pavilionweb.com/wp-content/uploads/2017/03/man-300x300.png");
         user.put("name", username_et.getText().toString());
         user.put("password", password_et.getText().toString());
+        user.put("wallet", wallet);
         Log.d(TAG, "ADDDING THIS USER: " + user.toString());
 
         db.collection("users")

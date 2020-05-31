@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -92,8 +91,6 @@ public class QRCode extends AppCompatActivity {
             @Override
             public void receiveDetections(Detector.Detections<Barcode> detections) {
                 final SparseArray<Barcode> barcodes = detections.getDetectedItems();
-                System.out.println("--------------> " + barcodes.valueAt(0).displayValue);
-
 
                 Intent intent = new Intent(QRCode.this, Description.class);
                 intent.putExtra("id", barcodes.valueAt(0).displayValue);

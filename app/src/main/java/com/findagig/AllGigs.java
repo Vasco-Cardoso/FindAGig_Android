@@ -18,6 +18,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class AllGigs extends AppCompatActivity {
     private static final String TAG = "allGigs";
@@ -40,9 +41,7 @@ public class AllGigs extends AppCompatActivity {
     private ArrayList<Model> getMyList() {
         final ArrayList<Model> models = new ArrayList<>();
 
-        final FirebaseAuth mAuth = FirebaseAuth.getInstance();;
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        final String user_uid = mAuth.getCurrentUser().getUid();
 
         db.collection("gigs")
                 .get()
@@ -52,11 +51,9 @@ public class AllGigs extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 if (!document.getBoolean("taken")) {
-                                    Log.d(TAG, document.getId() + " => " + document.getData().get("city") + ", " + document.getData().get("description") + ", " + document.getData().get("employer") + ", " + document.getData().get("employee"));
-
                                     Model m = new Model();
                                     m.setTitle(document.getData().get("name").toString());
-                                    m.setTitle(document.getId().toString());
+//                                    m.setTitle(document.getId().toString());
                                     m.setDescription(document.getData().get("description").toString());
                                     m.setImg(R.drawable.bookmark);
                                     models.add(m);

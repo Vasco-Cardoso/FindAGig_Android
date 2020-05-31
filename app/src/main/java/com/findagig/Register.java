@@ -114,6 +114,7 @@ public class Register extends AppCompatActivity {
         user.put("image", "https://www.pavilionweb.com/wp-content/uploads/2017/03/man-300x300.png");
         user.put("name", register_user_name.getText().toString());
         user.put("password", register_pass.getText().toString());
+        user.put("wallet", 0);
         Log.d(TAG, "ADDDING THIS USER: " + user.toString());
 
         db.collection("users")
