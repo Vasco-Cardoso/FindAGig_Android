@@ -71,6 +71,7 @@ public class MyAdapterMenu extends RecyclerView.Adapter<MyHolderMenu> {
                 else if (gTitle.equals("Map"))
                 {
                     Intent intent = new Intent(c, MapsActivity.class);
+                    intent.putExtra("type", "all_gigs_map");
                     c.startActivity(intent);
                 }
                 else if (gTitle.equals("All gigs"))

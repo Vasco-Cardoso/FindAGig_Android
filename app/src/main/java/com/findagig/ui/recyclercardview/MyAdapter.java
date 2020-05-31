@@ -114,11 +114,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyHolder> {
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
-                        Log.d(TAG, "=> Comparando: " +document.getData().get("name") + " com " + gTitle);
-
                         if(document.getData().get("name").toString().equals(gTitle)) {
                             id[0] = document.getId();
-                            Log.d(TAG, "=> ID na func: " + id[0]);
 
                             Intent intent = new Intent(c, Description.class);
                             intent.putExtra("id", id[0]);

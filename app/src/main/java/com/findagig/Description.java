@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -22,6 +23,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -30,6 +32,7 @@ public class Description extends AppCompatActivity {
     private String documentID = null;
     private int wallet = 0;
     private int valueOfGig = 0;
+    String lat_gig, long_gig = "";
 
     TextView gigName;
     TextView gigEmployer;
@@ -73,6 +76,13 @@ public class Description extends AppCompatActivity {
         seeMapButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Log.d(TAG, "=> Click no seeMap");
+
+                Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+                intent.putExtra("type", "gig_location");
+                intent.putExtra("lat", lat_gig);
+                intent.putExtra("long", long_gig);
+                startActivity(intent);
+
             }
         });
 
@@ -88,21 +98,21 @@ public class Description extends AppCompatActivity {
                     final String userUID = mAuth.getCurrentUser().getUid();
 
                     db.collection("users")
-                            .get()
-                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                    if (task.isSuccessful()) {
-                                        for (QueryDocumentSnapshot document : task.getResult()) {
-                                            if (document.getId().equals(userUID)) {
-                                                wallet = Integer.valueOf(document.getData().get("wallet").toString());
-                                                Log.d(TAG, "Valor da wallet é de : " + wallet);
-                                                break;
-                                            }
-                                        }
-                                    } else {
-                                        Log.d(TAG, "Error getting documents: ", task.getException());
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    if (document.getId().equals(userUID)) {
+                                        wallet = Integer.valueOf(document.getData().get("wallet").toString());
+                                        Log.d(TAG, "Valor da wallet é de : " + wallet);
+                                        break;
                                     }
+                                }
+                            } else {
+                                Log.d(TAG, "Error getting documents: ", task.getException());
+                            }
                                 }
                             });
 
@@ -205,6 +215,11 @@ public class Description extends AppCompatActivity {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         if (document.getId().equals(id)) {
                             Log.d(TAG, document.getId() + " => " + document.getData().get("city") + ", " + document.getData().get("description") + ", " + document.getData().get("employer"));
+
+                            GeoPoint local = (GeoPoint) document.getData().get("local");
+                            lat_gig = String.valueOf(local.getLatitude());
+                            long_gig = String.valueOf(local.getLongitude());
+
                             valueOfGig = Integer.valueOf(document.getData().get("reward").toString());
                             gigName.setText(document.getData().get("name").toString());
                             gigEmployer.setText(document.getData().get("employer").toString());

@@ -86,6 +86,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private String[] mLikelyPlaceAddresses;
     private List[] mLikelyPlaceAttributions;
     private LatLng[] mLikelyPlaceLatLngs;
+    String lat_gig, long_gig, type = "";
+
 
     public static MapsActivity newInstance() {
         return new MapsActivity();
@@ -94,6 +96,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            type = bundle.getString("type");
+
+            if(type.equals("gig_location")) {
+                lat_gig = bundle.getString("lat");
+                long_gig = bundle.getString("long");
+                Log.d(TAG, "=> Type => " + type + "-> " + lat_gig + ", " + long_gig);
+            }
+        }
+        else {
+            type = "all_gigs_map";
+        }
 
         // Retrieve location and camera position from saved instance state.
         if (savedInstanceState != null) {
@@ -115,6 +131,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+
 
     }
 
@@ -253,13 +271,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             // Set the map's camera position to the current location of the device.
                             mLastKnownLocation = task.getResult();
                             if (mLastKnownLocation != null) {
-                                System.out.println("------------------->" + mLastKnownLocation.getLatitude());
-                                System.out.println("------------------->" + mLastKnownLocation.getLongitude());
-                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                                        new LatLng(mLastKnownLocation.getLatitude(),
-                                                mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                                if(type.equals("gig_location")) {
+                                    Log.d(TAG, "=> Entrei no gig_location" + Double.valueOf(lat_gig) + "," + Double.valueOf(lat_gig));
+
+                                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                                            new LatLng(Double.valueOf(lat_gig),
+                                                    Double.valueOf(long_gig)), DEFAULT_ZOOM));
+                                }
+                                else {
+                                    Log.d(TAG, "=> Entrei no map");
+
+                                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                                            new LatLng(mLastKnownLocation.getLatitude(),
+                                                    mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                                }
+
                             }
-                        } else {
+                        }
+                        else {
                             Log.d(TAG, "Current location is null. Using defaults.");
                             Log.e(TAG, "Exception: %s", task.getException());
                             mMap.moveCamera(CameraUpdateFactory
