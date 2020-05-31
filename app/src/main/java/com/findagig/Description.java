@@ -213,9 +213,17 @@ public class Description extends AppCompatActivity {
                             gigReward.setText(document.getData().get("reward").toString() + " credits.");
 
                             if(document.getBoolean("taken")) {
-                                applyButton.setText("Complete gig!");
-                                applyButton.setBackgroundColor(0xFF00FF00);
+                                if (document.getBoolean("completed")) {
+                                    applyButton.setVisibility(View.GONE);
+                                }
+                                else
+                                {
+                                    applyButton.setText("Complete gig!");
+                                    applyButton.setBackgroundColor(0xFF00FF00);
+                                }
+
                             }
+
 
                             break;
 

@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -36,6 +37,8 @@ public class HistoryFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_history, container, false);
+
+        Toast.makeText(this.getContext(), "Gathering your current and past Gigs.", Toast.LENGTH_SHORT).show();
 
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.RecyclerView_HISTORY);
         mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 1));
