@@ -55,31 +55,9 @@ public class AllGigs extends AppCompatActivity {
                                 if (!document.getBoolean("taken")) {
                                     Model m = new Model();
                                     m.setTitle(document.getData().get("name").toString());
-//                                    m.setTitle(document.getId().toString());
                                     m.setDescription(document.getData().get("description").toString());
-
-                                    if(document.getData().get("type").toString().contains("CLEANING")) {
-                                        m.setImg(R.drawable.baseline_cleaning_services_24);
-                                    }
-                                    else if(document.getData().get("type").toString().contains("OTHER")) {
-                                        m.setImg(R.drawable.baseline_add_circle_outline_24);
-                                    }
-                                    else if(document.getData().get("type").toString().contains("ELETRONICS")) {
-                                        m.setImg(R.drawable.baseline_flash_on_24);
-                                    }
-                                    else if(document.getData().get("type").toString().contains("HOUSE")) {
-                                        m.setImg(R.drawable.baseline_house_24);
-                                    }
-                                    else if(document.getData().get("type").toString().contains("SECURITY")) {
-                                        m.setImg(R.drawable.baseline_security_24);
-                                    }
-                                    else {
-                                        m.setImg(R.drawable.baseline_add_circle_outline_24);
-                                    }
-
-
+                                    m.setImg(chooseImage(document));
                                     models.add(m);
-
                                 }
                             }
                             myAdapter.setModels(models);
@@ -109,25 +87,7 @@ public class AllGigs extends AppCompatActivity {
                                     Model m = new Model();
                                     m.setTitle(document.getData().get("name").toString());
                                     m.setDescription(document.getData().get("description").toString());
-
-                                    if(document.getData().get("type").toString().contains("CLEANING")) {
-                                        m.setImg(R.drawable.baseline_cleaning_services_24);
-                                    }
-                                    else if(document.getData().get("type").toString().contains("OTHER")) {
-                                        m.setImg(R.drawable.baseline_add_circle_outline_24);
-                                    }
-                                    else if(document.getData().get("type").toString().contains("ELETRONICS")) {
-                                        m.setImg(R.drawable.baseline_flash_on_24);
-                                    }
-                                    else if(document.getData().get("type").toString().contains("HOUSE")) {
-                                        m.setImg(R.drawable.baseline_house_24);
-                                    }
-                                    else if(document.getData().get("type").toString().contains("SECURITY")) {
-                                        m.setImg(R.drawable.baseline_security_24);
-                                    }
-                                    else {
-                                        m.setImg(R.drawable.baseline_add_circle_outline_24);
-                                    }
+                                    m.setImg(chooseImage(document));
                                     models.add(m);
 
                                 }
@@ -141,6 +101,28 @@ public class AllGigs extends AppCompatActivity {
                 });
 
         return models;
+    }
+
+
+    public int chooseImage(QueryDocumentSnapshot document) {
+        if(document.getData().get("type").toString().contains("CLEANING")) {
+            return (R.drawable.baseline_cleaning_services_24);
+        }
+        else if(document.getData().get("type").toString().contains("OTHER")) {
+            return (R.drawable.baseline_add_circle_outline_24);
+        }
+        else if(document.getData().get("type").toString().contains("ELETRONICS")) {
+            return (R.drawable.baseline_flash_on_24);
+        }
+        else if(document.getData().get("type").toString().contains("HOUSE")) {
+            return (R.drawable.baseline_house_24);
+        }
+        else if(document.getData().get("type").toString().contains("SECURITY")) {
+            return (R.drawable.baseline_security_24);
+        }
+        else {
+            return (R.drawable.baseline_add_circle_outline_24);
+        }
     }
 
     public void searchGig(View view) {

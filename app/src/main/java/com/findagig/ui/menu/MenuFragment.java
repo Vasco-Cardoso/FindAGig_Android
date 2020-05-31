@@ -1,11 +1,13 @@
 package com.findagig.ui.menu;
 
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,18 +16,25 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.findagig.GlideApp;
 import com.findagig.R;
 import com.findagig.ui.recyclercardview.Model;
 import com.findagig.ui.recyclercardview.ModelForMenu;
 import com.findagig.ui.recyclercardview.MyAdapter;
 import com.findagig.ui.recyclercardview.MyAdapterMenu;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageException;
+import com.google.firebase.storage.StorageReference;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class MenuFragment extends Fragment {
@@ -39,6 +48,7 @@ public class MenuFragment extends Fragment {
     private String imagePath;
     private String name;
     private String userUID;
+    ImageView imageView;
 
     // Firebase variables
     private FirebaseAuth mAuth;
@@ -65,6 +75,7 @@ public class MenuFragment extends Fragment {
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView_MENU);
         wallet_value = rootView.findViewById(R.id.wallet_value);
         name_value = rootView.findViewById(R.id.name_value);
+        imageView = rootView.findViewById(R.id.imageView_menu);
 
         mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         myAdapter = new MyAdapterMenu(this.getContext(), getMyList());
@@ -120,15 +131,14 @@ public class MenuFragment extends Fragment {
                                 imagePath = document.getData().get("image").toString();
                                 wallet = document.getData().get("wallet").toString();
 
-
                                 wallet_value.setText("You currently got " + wallet + " credits!");
                                 name_value.setText("Welcome back " + name + ", good to see you here!");
                                 name_value.setTypeface(null, Typeface.BOLD);
-//                            try {
-//                                getImage(userUID);
-//                            } catch (IOException e) {
-//                                e.printStackTrace();
-//                            }
+                            try {
+                                getImage(userUID);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                             }
                         }
                     } else {
@@ -136,6 +146,46 @@ public class MenuFragment extends Fragment {
                     }
                 }
             });
+    }
+
+    private void getImage(String userUID) throws IOException {
+        StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+        StorageReference pathReference = storageRef.child("avatars/" + userUID);
+
+        Log.d(TAG, "Image path: " + pathReference.toString());
+        StorageReference ref = FirebaseStorage.getInstance().getReferenceFromUrl(pathReference.toString());
+
+        ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Log.d(TAG, "File exists");
+
+                loadImage();
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                if (exception instanceof StorageException &&
+                        ((StorageException) exception).getErrorCode() == StorageException.ERROR_OBJECT_NOT_FOUND) {
+                    Log.d(TAG, "File not exist");
+                }
+            }
+        });
+    }
+
+    public void loadImage()
+    {
+        StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+        StorageReference pathReference = storageRef.child("avatars/" + userUID);
+
+        Log.d(TAG, "Image path: " + pathReference.toString());
+        StorageReference ref = FirebaseStorage.getInstance().getReferenceFromUrl(pathReference.toString());
+
+        // Load the image using Glide
+        GlideApp.with(this)
+                .load(pathReference)
+                .into(imageView);
     }
 
 }

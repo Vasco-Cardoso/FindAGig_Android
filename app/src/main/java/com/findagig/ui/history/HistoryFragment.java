@@ -1,5 +1,6 @@
 package com.findagig.ui.history;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -74,26 +75,7 @@ public class HistoryFragment extends Fragment {
                                 Model m = new Model();
                                 m.setTitle(document.getData().get("name").toString());
                                 m.setDescription(document.getData().get("description").toString());
-
-                                if(document.getData().get("type").toString().contains("CLEANING")) {
-                                    m.setImg(R.drawable.baseline_cleaning_services_24);
-                                }
-                                else if(document.getData().get("type").toString().contains("OTHER")) {
-                                    m.setImg(R.drawable.baseline_add_circle_outline_24);
-                                }
-                                else if(document.getData().get("type").toString().contains("ELETRONICS")) {
-                                    m.setImg(R.drawable.baseline_flash_on_24);
-                                }
-                                else if(document.getData().get("type").toString().contains("HOUSE")) {
-                                    m.setImg(R.drawable.baseline_house_24);
-                                }
-                                else if(document.getData().get("type").toString().contains("SECURITY")) {
-                                    m.setImg(R.drawable.baseline_security_24);
-                                }
-                                else {
-                                    m.setImg(R.drawable.baseline_add_circle_outline_24);
-                                }
-
+                                m.setImg(chooseImage(document));
                                 models.add(m);
                             }
 
@@ -129,25 +111,7 @@ public class HistoryFragment extends Fragment {
                                         Model m = new Model();
                                         m.setTitle(document.getData().get("name").toString());
                                         m.setDescription(document.getData().get("description").toString());
-                                        if(document.getData().get("type").toString().contains("CLEANING")) {
-                                            m.setImg(R.drawable.baseline_cleaning_services_24);
-                                        }
-                                        else if(document.getData().get("type").toString().contains("OTHER")) {
-                                            m.setImg(R.drawable.baseline_add_circle_outline_24);
-                                        }
-                                        else if(document.getData().get("type").toString().contains("ELETRONICS")) {
-                                            m.setImg(R.drawable.baseline_flash_on_24);
-                                        }
-                                        else if(document.getData().get("type").toString().contains("HOUSE")) {
-                                            m.setImg(R.drawable.baseline_house_24);
-                                        }
-                                        else if(document.getData().get("type").toString().contains("SECURITY")) {
-                                            m.setImg(R.drawable.baseline_security_24);
-                                        }
-                                        else {
-                                            m.setImg(R.drawable.baseline_add_circle_outline_24);
-                                        }
-
+                                        m.setImg(chooseImage(document));
                                         models.add(m);
                                     }
 
@@ -162,5 +126,26 @@ public class HistoryFragment extends Fragment {
                 });
 
         return models;
+    }
+
+    public int chooseImage(QueryDocumentSnapshot document) {
+        if(document.getData().get("type").toString().contains("CLEANING")) {
+            return (R.drawable.baseline_cleaning_services_24);
+        }
+        else if(document.getData().get("type").toString().contains("OTHER")) {
+            return (R.drawable.baseline_add_circle_outline_24);
+        }
+        else if(document.getData().get("type").toString().contains("ELETRONICS")) {
+            return (R.drawable.baseline_flash_on_24);
+        }
+        else if(document.getData().get("type").toString().contains("HOUSE")) {
+            return (R.drawable.baseline_house_24);
+        }
+        else if(document.getData().get("type").toString().contains("SECURITY")) {
+            return (R.drawable.baseline_security_24);
+        }
+        else {
+            return (R.drawable.baseline_add_circle_outline_24);
+        }
     }
 }

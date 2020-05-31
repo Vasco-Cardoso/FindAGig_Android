@@ -19,6 +19,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageException;
 import com.google.firebase.storage.StorageReference;
 
 import androidx.annotation.NonNull;
@@ -120,6 +121,34 @@ public class SettingsPage extends AppCompatActivity {
         StorageReference pathReference = storageRef.child("avatars/" + userUID);
 
         Log.d(TAG, "Image path: " + pathReference.toString());
+        StorageReference ref = FirebaseStorage.getInstance().getReferenceFromUrl(pathReference.toString());
+
+        ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Log.d(TAG, "File exists");
+
+                loadImage();
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                if (exception instanceof StorageException &&
+                        ((StorageException) exception).getErrorCode() == StorageException.ERROR_OBJECT_NOT_FOUND) {
+                    Log.d(TAG, "File not exist");
+                }
+            }
+        });
+    }
+
+    public void loadImage()
+    {
+        StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+        StorageReference pathReference = storageRef.child("avatars/" + userUID);
+
+        Log.d(TAG, "Image path: " + pathReference.toString());
+        StorageReference ref = FirebaseStorage.getInstance().getReferenceFromUrl(pathReference.toString());
 
         imageView = findViewById(R.id.imageView_settings);
 
@@ -149,11 +178,11 @@ public class SettingsPage extends AppCompatActivity {
                             username_et.setText(name);
                             password_et.setText(password);
 
-//                            try {
-//                                getImage(userUID);
-//                            } catch (IOException e) {
-//                                e.printStackTrace();
-//                            }
+                            try {
+                                getImage(userUID);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                             Log.d(TAG, document.getId() + " => " + name + ", " + email + ", " + imagePath);
                         }
                     }
