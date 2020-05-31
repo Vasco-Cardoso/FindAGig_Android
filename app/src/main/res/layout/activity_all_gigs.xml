@@ -43,7 +43,7 @@
 
     <EditText
         android:id="@+id/search_bar"
-        android:layout_width="322dp"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="30dp"
         android:layout_marginTop="20dp"
@@ -61,8 +61,7 @@
         android:layout_width="51dp"
         android:layout_height="45dp"
         android:layout_marginTop="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        android:layout_marginLeft="0dp"
         app:layout_constraintStart_toEndOf="@+id/search_bar"
         app:layout_constraintTop_toBottomOf="@+id/HistoryText"
         app:srcCompat="@drawable/ic_search"
