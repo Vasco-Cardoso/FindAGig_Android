@@ -66,9 +66,7 @@ public class HistoryFragment extends Fragment {
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
-                        if (document.getBoolean("taken")) {
-                            Log.d(TAG, document.getId() + " => " + document.getData().get("city") + ", " + document.getData().get("description") + ", " + document.getData().get("employer") + ", " + document.getData().get("employee"));
-
+                        if (document.getBoolean("taken") && !document.getBoolean("completed")) {
                             if (document.getData().get("employee").toString().equals(user_uid)) {
                                 Model m = new Model();
                                 m.setTitle(document.getData().get("name").toString());
@@ -105,8 +103,6 @@ public class HistoryFragment extends Fragment {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 if (document.getBoolean("taken") && document.getBoolean("completed")) {
-                                    Log.d(TAG, document.getId() + " => " + document.getData().get("city") + ", " + document.getData().get("description") + ", " + document.getData().get("employer") + ", " + document.getData().get("employee"));
-
                                     if (document.getData().get("employee").toString().equals(user_uid)) {
                                         Model m = new Model();
                                         m.setTitle(document.getData().get("name").toString());
@@ -117,8 +113,8 @@ public class HistoryFragment extends Fragment {
 
                                 }
                             }
-                            myAdapter.setModels(models);
-                            mRecyclerView.setAdapter(myAdapter);
+                            myAdapter2.setModels(models);
+                            mRecyclerView2.setAdapter(myAdapter2);
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
