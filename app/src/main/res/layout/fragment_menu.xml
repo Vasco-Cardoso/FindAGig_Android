@@ -6,15 +6,42 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:id="@+id/WelcomeText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="30dp"
+        android:text="Welcome"
+        android:textColor="#000"
+        android:textSize="75sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/PointText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="."
+        android:layout_marginTop="30dp"
+        android:textColor="#ffd700"
+        android:textSize="80sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toRightOf="@+id/WelcomeText"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
     <ImageView
         android:id="@+id/imageView_menu"
         android:layout_width="97dp"
         android:layout_height="103dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/user" />
+        app:srcCompat="@drawable/user"
+        app:layout_constraintTop_toBottomOf="@+id/WelcomeText"/>
 
     <TextView
         android:id="@+id/name_menu"
@@ -27,6 +54,17 @@
         app:layout_constraintTop_toBottomOf="@id/imageView_menu"
         android:layout_marginTop="20dp"/>
 
+    <TextView
+        android:id="@+id/wallet_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Wallet: "
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/name_menu"
+        android:layout_marginTop="5dp"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView_MENU"
         android:layout_width="match_parent"
@@ -34,7 +72,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/name_menu"
+        app:layout_constraintTop_toBottomOf="@id/wallet_menu"
         android:layout_marginTop="25dp"/>
+
+    <TextView
+        android:id="@+id/wallet_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="Value"
+        app:layout_constraintStart_toEndOf="@+id/wallet_menu"
+        app:layout_constraintTop_toBottomOf="@id/name_menu" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

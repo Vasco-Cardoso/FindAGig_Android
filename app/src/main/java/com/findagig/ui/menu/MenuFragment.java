@@ -26,7 +26,7 @@ public class MenuFragment extends Fragment {
     RecyclerView mRecyclerView;
     MyAdapterMenu myAdapter;
 
-    String[] options = new String[]{"All gigs","Logout","Settings", "Map", "QRCode", "History" };
+    String[] options = new String[]{"All gigs","History","Settings", "Map", "QRCode", "Logout" };
 
     @Nullable
     @Override
