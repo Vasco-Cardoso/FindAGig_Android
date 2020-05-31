@@ -58,10 +58,12 @@
 
     <ImageView
         android:id="@+id/search_btn"
+        android:onClick="searchGig"
         android:layout_width="51dp"
         android:layout_height="45dp"
         android:layout_marginTop="20dp"
         android:layout_marginRight="30dp"
+        android:layout_marginLeft="7dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/search_bar"

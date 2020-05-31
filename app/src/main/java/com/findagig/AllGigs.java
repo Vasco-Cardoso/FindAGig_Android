@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
 
 import com.findagig.ui.recyclercardview.Model;
 import com.findagig.ui.recyclercardview.MyAdapter;
@@ -89,6 +91,64 @@ public class AllGigs extends AppCompatActivity {
                 });
 
         return models;
+    }
+
+    private ArrayList<Model> getMyList(final String search) {
+        final ArrayList<Model> models = new ArrayList<>();
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection("gigs")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                if (!document.getBoolean("taken") && document.getData().get("name").toString().contains(search)) {
+                                    Model m = new Model();
+                                    m.setTitle(document.getData().get("name").toString());
+//                                    m.setTitle(document.getId().toString());
+                                    m.setDescription(document.getData().get("description").toString());
+
+                                    if(document.getData().get("type").toString().contains("CLEANING")) {
+                                        m.setImg(R.drawable.baseline_cleaning_services_24);
+                                    }
+                                    else if(document.getData().get("type").toString().contains("OTHER")) {
+                                        m.setImg(R.drawable.baseline_add_circle_outline_24);
+                                    }
+                                    else if(document.getData().get("type").toString().contains("ELETRONICS")) {
+                                        m.setImg(R.drawable.baseline_flash_on_24);
+                                    }
+                                    else if(document.getData().get("type").toString().contains("HOUSE")) {
+                                        m.setImg(R.drawable.baseline_house_24);
+                                    }
+                                    else if(document.getData().get("type").toString().contains("SECURITY")) {
+                                        m.setImg(R.drawable.baseline_security_24);
+                                    }
+                                    else {
+                                        m.setImg(R.drawable.baseline_add_circle_outline_24);
+                                    }
+
+
+                                    models.add(m);
+
+                                }
+                            }
+                            myAdapter.setModels(models);
+                            mRecyclerView.setAdapter(myAdapter);
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+
+        return models;
+    }
+
+    public void searchGig(View view) {
+        EditText searchBar = findViewById(R.id.search_bar);
+        getMyList(searchBar.getText().toString().trim());
     }
 }
 
