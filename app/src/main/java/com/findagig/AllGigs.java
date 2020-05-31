@@ -105,10 +105,9 @@ public class AllGigs extends AppCompatActivity {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                if (!document.getBoolean("taken") && document.getData().get("name").toString().contains(search)) {
+                                if (!document.getBoolean("taken") && document.getData().get("name").toString().toLowerCase().contains(search.toLowerCase())) {
                                     Model m = new Model();
                                     m.setTitle(document.getData().get("name").toString());
-//                                    m.setTitle(document.getId().toString());
                                     m.setDescription(document.getData().get("description").toString());
 
                                     if(document.getData().get("type").toString().contains("CLEANING")) {
@@ -129,8 +128,6 @@ public class AllGigs extends AppCompatActivity {
                                     else {
                                         m.setImg(R.drawable.baseline_add_circle_outline_24);
                                     }
-
-
                                     models.add(m);
 
                                 }

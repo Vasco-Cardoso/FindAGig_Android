@@ -33,14 +33,18 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
-    <ImageView
+    <com.mikhaellopez.circularimageview.CircularImageView
         android:id="@+id/imageView_menu"
-        android:layout_width="97dp"
-        android:layout_height="103dp"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
         android:layout_marginTop="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/user"
+        app:civ_border_color="#CFD5F4"
+        app:civ_border_width="2dp"
+        app:civ_shadow="true"
+        app:civ_shadow_color="#C2C6DD"
         app:layout_constraintTop_toBottomOf="@+id/WelcomeText"/>
 
     <TextView

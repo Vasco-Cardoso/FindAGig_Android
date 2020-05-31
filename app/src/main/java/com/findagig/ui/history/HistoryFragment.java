@@ -74,7 +74,26 @@ public class HistoryFragment extends Fragment {
                                 Model m = new Model();
                                 m.setTitle(document.getData().get("name").toString());
                                 m.setDescription(document.getData().get("description").toString());
-                                m.setImg(R.drawable.bookmark);
+
+                                if(document.getData().get("type").toString().contains("CLEANING")) {
+                                    m.setImg(R.drawable.baseline_cleaning_services_24);
+                                }
+                                else if(document.getData().get("type").toString().contains("OTHER")) {
+                                    m.setImg(R.drawable.baseline_add_circle_outline_24);
+                                }
+                                else if(document.getData().get("type").toString().contains("ELETRONICS")) {
+                                    m.setImg(R.drawable.baseline_flash_on_24);
+                                }
+                                else if(document.getData().get("type").toString().contains("HOUSE")) {
+                                    m.setImg(R.drawable.baseline_house_24);
+                                }
+                                else if(document.getData().get("type").toString().contains("SECURITY")) {
+                                    m.setImg(R.drawable.baseline_security_24);
+                                }
+                                else {
+                                    m.setImg(R.drawable.baseline_add_circle_outline_24);
+                                }
+
                                 models.add(m);
                             }
 
@@ -110,7 +129,25 @@ public class HistoryFragment extends Fragment {
                                         Model m = new Model();
                                         m.setTitle(document.getData().get("name").toString());
                                         m.setDescription(document.getData().get("description").toString());
-                                        m.setImg(R.drawable.bookmark);
+                                        if(document.getData().get("type").toString().contains("CLEANING")) {
+                                            m.setImg(R.drawable.baseline_cleaning_services_24);
+                                        }
+                                        else if(document.getData().get("type").toString().contains("OTHER")) {
+                                            m.setImg(R.drawable.baseline_add_circle_outline_24);
+                                        }
+                                        else if(document.getData().get("type").toString().contains("ELETRONICS")) {
+                                            m.setImg(R.drawable.baseline_flash_on_24);
+                                        }
+                                        else if(document.getData().get("type").toString().contains("HOUSE")) {
+                                            m.setImg(R.drawable.baseline_house_24);
+                                        }
+                                        else if(document.getData().get("type").toString().contains("SECURITY")) {
+                                            m.setImg(R.drawable.baseline_security_24);
+                                        }
+                                        else {
+                                            m.setImg(R.drawable.baseline_add_circle_outline_24);
+                                        }
+
                                         models.add(m);
                                     }
 
