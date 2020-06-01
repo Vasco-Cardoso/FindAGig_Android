@@ -100,7 +100,7 @@ public class Register extends AppCompatActivity {
                         Toast.makeText(Register.this, "Authentication success.",
                                 Toast.LENGTH_SHORT).show();
 
-                        addUserRegistry();
+                        addUserRegistry(register_mail.getText().toString(), register_user_name.getText().toString(), register_pass.getText().toString());
 
                     } else {
                         // If sign in fails, display a message to the user.
@@ -111,14 +111,14 @@ public class Register extends AppCompatActivity {
             });
     }
 
-    public void addUserRegistry() {
+    public void addUserRegistry(String mail, String password, String name) {
         final FirebaseFirestore db =  FirebaseFirestore.getInstance();
 
         Map<String, Object> user = new HashMap<>();
-        user.put("email", register_mail.getText().toString());
+        user.put("email", mail);
         user.put("image", "https://www.pavilionweb.com/wp-content/uploads/2017/03/man-300x300.png");
-        user.put("name", register_user_name.getText().toString());
-        user.put("password", register_pass.getText().toString());
+        user.put("name", name);
+        user.put("password", password);
         user.put("wallet", 0);
 
         Log.d(TAG, "ADDDING THIS USER: " + user.toString());
@@ -131,6 +131,7 @@ public class Register extends AppCompatActivity {
                 public void onSuccess(Void aVoid) {
                     Log.d(TAG, "DocumentSnapshot successfully written!");
                     uploadImage();
+
                     Intent i = new Intent(getApplicationContext(), MainMenu.class);
                     startActivity(i);
                 }
