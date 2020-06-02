@@ -45,6 +45,13 @@ public class AllGigs extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        getMyList();
+    }
+
     private ArrayList<Model> getMyList() {
         final ArrayList<Model> models = new ArrayList<>();
 
@@ -125,6 +132,9 @@ public class AllGigs extends AppCompatActivity {
         }
         else if(document.getData().get("type").toString().contains("HOUSE")) {
             return (R.drawable.baseline_house_24);
+        }
+        else if(document.getData().get("type").toString().contains("Withdraw")) {
+            return (R.drawable.baseline_monetization_on_24);
         }
         else if(document.getData().get("type").toString().contains("SECURITY")) {
             return (R.drawable.baseline_security_24);

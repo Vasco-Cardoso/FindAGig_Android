@@ -116,8 +116,8 @@ public class MenuFragment extends Fragment {
             if (opt.equals("All gigs")) {
                 m.setImg(R.drawable.baseline_work_24);
             }
-            else if (opt.equals("History")) {
-                m.setImg(R.drawable.baseline_history_24);
+            else if (opt.equals("Withdraw")) {
+                m.setImg(R.drawable.baseline_monetization_on_24);
             }
             else if (opt.equals("Settings")) {
                 m.setImg(R.drawable.baseline_settings_24);
