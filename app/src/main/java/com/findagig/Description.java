@@ -220,7 +220,7 @@ public class Description extends AppCompatActivity {
                             lat_gig = String.valueOf(local.getLatitude());
                             long_gig = String.valueOf(local.getLongitude());
 
-                            valueOfGig = Integer.valueOf(document.getData().get("reward").toString());
+                            valueOfGig = Integer.parseInt(document.getData().get("reward").toString());
                             gigName.setText(document.getData().get("name").toString());
                             gigEmployer.setText(document.getData().get("employer").toString());
                             gigDesc.setText(document.getData().get("description").toString());
@@ -238,10 +238,7 @@ public class Description extends AppCompatActivity {
                                 }
 
                             }
-
-
                             break;
-
                         }
                     }
 

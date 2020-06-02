@@ -1,5 +1,6 @@
 package com.findagig.ui.menu;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
@@ -51,6 +52,7 @@ public class MenuFragment extends Fragment {
     private String name;
     private String userUID;
     ImageView imageView;
+    ProgressDialog progressDialog;
 
     // Firebase variables
     private FirebaseAuth mAuth;
@@ -61,11 +63,21 @@ public class MenuFragment extends Fragment {
 
     String[] options = new String[]{"All gigs", "Map", "QRCode", "History","Settings", "Logout" };
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        getUserValues();
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_menu, container, false);
+
+        progressDialog = new ProgressDialog(this.getContext());
+        progressDialog.show();
 
         // Initializing Firebase variables
         mAuth = FirebaseAuth.getInstance();
@@ -137,18 +149,21 @@ public class MenuFragment extends Fragment {
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             if (document.getId().equals(userUID)) {
                                 name = document.getData().get("name").toString();
-                                name = document.getData().get("name").toString();
                                 imagePath = document.getData().get("image").toString();
                                 wallet = document.getData().get("wallet").toString();
 
                                 wallet_value.setText("You currently got " + wallet + " credits!");
                                 name_value.setText("Welcome back " + name + ", good to see you here!");
                                 name_value.setTypeface(null, Typeface.BOLD);
-                            try {
-                                getImage(userUID);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                                try {
+                                    getImage(userUID);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+
+                                progressDialog.dismiss();
+
+                                break;
                             }
                         }
                     } else {
@@ -196,6 +211,7 @@ public class MenuFragment extends Fragment {
         GlideApp.with(this)
                 .load(pathReference)
                 .into(imageView);
+
     }
 
 }

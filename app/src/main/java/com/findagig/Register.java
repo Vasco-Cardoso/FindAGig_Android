@@ -58,16 +58,7 @@ public class Register extends AppCompatActivity {
                         && register_pass.getText().toString() != null
                         && register_pass.getText().toString().length() > 6)
                 {
-                    boolean result_from_register = Services.registerUser(register_mail.getText().toString() , register_pass.getText().toString());
-                    if (result_from_register) {
-                        Toast.makeText(Register.this, "Register success.",
-                                Toast.LENGTH_SHORT).show();
-                    }
-                    else {
-                        Toast.makeText(Register.this, "Failed register.",
-                                Toast.LENGTH_SHORT).show();
-                    }
-                    //registerUser();
+                    registerUser();
                 }
                 else {
                     Toast.makeText(Register.this, "Check your parameters.",
@@ -109,7 +100,7 @@ public class Register extends AppCompatActivity {
                         Toast.makeText(Register.this, "Authentication success.",
                                 Toast.LENGTH_SHORT).show();
 
-                        addUserRegistry(register_mail.getText().toString(), register_user_name.getText().toString(), register_pass.getText().toString());
+                        addUserRegistry(register_mail.getText().toString(), register_pass.getText().toString(), register_user_name.getText().toString());
 
                     } else {
                         // If sign in fails, display a message to the user.
@@ -139,7 +130,6 @@ public class Register extends AppCompatActivity {
                 @Override
                 public void onSuccess(Void aVoid) {
                     Log.d(TAG, "DocumentSnapshot successfully written!");
-                    uploadImage();
 
                     Intent i = new Intent(getApplicationContext(), MainMenu.class);
                     startActivity(i);

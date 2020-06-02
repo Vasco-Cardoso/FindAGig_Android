@@ -1,5 +1,6 @@
 package com.findagig.ui.QRCode;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
@@ -7,6 +8,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -15,18 +17,34 @@ import android.widget.Toast;
 
 import com.findagig.Description;
 import com.findagig.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.IOException;
 
 public class QRCode extends AppCompatActivity {
+    // Tag
+    private static final String TAG = "QRCODE";
+
+    String userUID;
+    String walletValue;
+
     SurfaceView surfaceView;
     TextView txtBarcodeValue;
+
     private BarcodeDetector barcodeDetector;
     private CameraSource cameraSource;
+    private FirebaseAuth mAuth;
     private static final int REQUEST_CAMERA_PERMISSION = 201;
 
 
@@ -34,6 +52,10 @@ public class QRCode extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_q_r_code);
+
+        mAuth = FirebaseAuth.getInstance();
+        userUID = mAuth.getCurrentUser().getUid();
+
         initViews();
     }
 
@@ -92,11 +114,75 @@ public class QRCode extends AppCompatActivity {
             public void receiveDetections(Detector.Detections<Barcode> detections) {
                 final SparseArray<Barcode> barcodes = detections.getDetectedItems();
 
-                Intent intent = new Intent(QRCode.this, Description.class);
-                intent.putExtra("id", barcodes.valueAt(0).displayValue);
-                startActivity(intent);
+                String qrCodeString = barcodes.valueAt(0).displayValue;
+                Log.d(TAG, "qrcode: " + qrCodeString);
+
+                if (qrCodeString.contains("WITHDRAW")) {
+                    String valueToWithdraw = qrCodeString.split(":")[1];
+                    Log.d(TAG, "qrcode value: " + valueToWithdraw);
+
+                    withdrawFromWallet(valueToWithdraw);
+
+                }
+                else {
+                    Intent intent = new Intent(QRCode.this, Description.class);
+                    intent.putExtra("id", barcodes.valueAt(0).displayValue);
+                    startActivity(intent);
+                }
             }
         });
+    }
+
+    private void withdrawFromWallet(final String valueToWithdraw) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("users")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                if (document.getId().equals(userUID)) {
+                                    walletValue = document.getData().get("wallet").toString();
+                                    Log.d(TAG, "Wallet value: " + walletValue + ", value to withdraw: " + valueToWithdraw);
+
+                                    int finalValue = Integer.parseInt(walletValue) - Integer.parseInt(valueToWithdraw);
+
+                                    if (finalValue < 0) {
+                                        Toast.makeText(getApplicationContext(), "You dont have enough credits for that!", Toast.LENGTH_SHORT).show();
+                                    }
+                                    else {
+                                        Toast.makeText(getApplicationContext(), "You can withdraw that quantity!", Toast.LENGTH_SHORT).show();
+                                        setWallet(finalValue);
+                                    }
+                                }
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+    }
+
+    private void setWallet(int finalValue) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection("users").document(userUID)
+                .update("wallet", finalValue)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully written!");
+                        QRCode.super.finish();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error writing document", e);
+                        QRCode.super.finish();
+                    }
+                });
     }
 
 

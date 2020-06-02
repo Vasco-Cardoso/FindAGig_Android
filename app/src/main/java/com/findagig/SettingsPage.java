@@ -2,6 +2,7 @@ package com.findagig;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -66,6 +67,7 @@ public class SettingsPage extends AppCompatActivity {
     EditText username_et;
     ImageView imageView_settings;
     Button saveButton;
+    ProgressDialog progressDialog;
 
     // Firebase variables
     private FirebaseFirestore db;
@@ -89,10 +91,14 @@ public class SettingsPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_page);
 
+        progressDialog = new ProgressDialog(this);
+        progressDialog.show();
+
         // Initializing Firebase variables
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         storage  = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
 
         // Initializing edit texts and buttom
         email_et = findViewById(R.id.username);
@@ -128,15 +134,6 @@ public class SettingsPage extends AppCompatActivity {
             public void onSuccess(Uri uri) {
                 Log.d(TAG, "File exists");
                 loadImage();
-
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                if (exception instanceof StorageException &&
-                        ((StorageException) exception).getErrorCode() == StorageException.ERROR_OBJECT_NOT_FOUND) {
-                    Log.d(TAG, "File not exist");
-                }
             }
         });
     }
@@ -183,6 +180,7 @@ public class SettingsPage extends AppCompatActivity {
                                 e.printStackTrace();
                             }
                             Log.d(TAG, document.getId() + " => " + name + ", " + email + ", " + imagePath);
+                            progressDialog.dismiss();
                         }
                     }
                 } else {
@@ -235,21 +233,25 @@ public class SettingsPage extends AppCompatActivity {
                 Uri contentUri = Uri.fromFile(f);
                 mediaScanIntent.setData(contentUri);
                 this.sendBroadcast(mediaScanIntent);
-                //uploadImageToFirebase(f.getName(),contentUri);
+                Log.d(TAG, " => Before Uploaded" + contentUri);
+
+                uploadImageToFirebase(mAuth.getCurrentUser().getUid(), contentUri);
             }
         }
 
     }
 
     private void uploadImageToFirebase(String name, Uri contentUri) {
-        final StorageReference image = storageReference.child("avatars/" + name);
-        image.putFile(contentUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+        Log.d(TAG, " => Uploaded :" + contentUri);
+
+        final StorageReference imageRef = storageReference.child("avatars/" + name);
+        imageRef.putFile(contentUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                image.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
-                        Log.d("tag", "onSuccess: Uploaded Image URl is " + uri.toString());
+                        Log.d(TAG, "onSuccess: Uploaded Image URl is " + uri.toString());
                     }
                 });
 
@@ -317,7 +319,6 @@ public class SettingsPage extends AppCompatActivity {
             }
         }
     }
-
 
     public void clickCamera(View view) {
         Log.d(TAG, "Clicked camera icon.");
