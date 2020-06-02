@@ -15,6 +15,7 @@ import com.findagig.LogInPage;
 import com.findagig.MapsActivity;
 import com.findagig.R;
 import com.findagig.SettingsPage;
+import com.findagig.WithdrawCredits;
 import com.findagig.ui.QRCode.QRCode;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -72,6 +73,10 @@ public class MyAdapterMenu extends RecyclerView.Adapter<MyHolderMenu> {
                 {
                     Intent intent = new Intent(c, MapsActivity.class);
                     intent.putExtra("type", "all_gigs_map");
+                    c.startActivity(intent);
+                }
+                if(gTitle.equals("Withdraw"))  {
+                    Intent intent = new Intent(c, WithdrawCredits.class);
                     c.startActivity(intent);
                 }
                 else if (gTitle.equals("All gigs"))

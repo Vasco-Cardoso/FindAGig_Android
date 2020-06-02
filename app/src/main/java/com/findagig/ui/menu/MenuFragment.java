@@ -61,7 +61,7 @@ public class MenuFragment extends Fragment {
     TextView wallet_value;
     TextView name_value;
 
-    String[] options = new String[]{"All gigs", "Map", "QRCode", "History","Settings", "Logout" };
+    String[] options = new String[]{"All gigs", "Map", "QRCode", "Withdraw","Settings", "Logout" };
 
     @Override
     public void onResume() {
