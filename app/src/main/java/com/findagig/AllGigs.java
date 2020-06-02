@@ -5,10 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.findagig.ui.recyclercardview.Model;
 import com.findagig.ui.recyclercardview.MyAdapter;
@@ -26,11 +28,14 @@ public class AllGigs extends AppCompatActivity {
     private static final String TAG = "allGigs";
     RecyclerView mRecyclerView;
     MyAdapter myAdapter;
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_gigs);
+
+        progressDialog = new ProgressDialog(this);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.RecyclerView_AllGigs);
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, 1));
@@ -83,7 +88,9 @@ public class AllGigs extends AppCompatActivity {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                if (!document.getBoolean("taken") && document.getData().get("name").toString().toLowerCase().contains(search.toLowerCase())) {
+                                if (!document.getBoolean("taken") &&
+                                          (document.getData().get("name").toString().toLowerCase().contains(search.toLowerCase())
+                                        || document.getData().get("city").toString().toLowerCase().contains(search.toLowerCase()))) {
                                     Model m = new Model();
                                     m.setTitle(document.getData().get("name").toString());
                                     m.setDescription(document.getData().get("description").toString());
@@ -94,6 +101,8 @@ public class AllGigs extends AppCompatActivity {
                             }
                             myAdapter.setModels(models);
                             mRecyclerView.setAdapter(myAdapter);
+                            progressDialog.dismiss();
+
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
@@ -126,6 +135,8 @@ public class AllGigs extends AppCompatActivity {
     }
 
     public void searchGig(View view) {
+        progressDialog.show();
+
         EditText searchBar = findViewById(R.id.search_bar);
         getMyList(searchBar.getText().toString().trim());
     }

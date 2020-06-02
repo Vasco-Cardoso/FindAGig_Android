@@ -56,6 +56,13 @@ public class HistoryFragment extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        getMyList();
+        getMyList2();
+    }
+
     private ArrayList<Model> getMyList() {
         final ArrayList<Model> models = new ArrayList<>();
 

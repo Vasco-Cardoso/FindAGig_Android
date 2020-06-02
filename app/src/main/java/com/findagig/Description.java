@@ -105,37 +105,20 @@ public class Description extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 for (QueryDocumentSnapshot document : task.getResult()) {
                                     if (document.getId().equals(userUID)) {
-                                        wallet = Integer.valueOf(document.getData().get("wallet").toString());
+                                        wallet = Integer.parseInt(document.getData().get("wallet").toString());
                                         Log.d(TAG, "Valor da wallet é de : " + wallet);
+
+                                        updateWallet(valueOfGig, wallet, userUID);
                                         break;
                                     }
                                 }
-                            } else {
+                            }
+                            else {
                                 Log.d(TAG, "Error getting documents: ", task.getException());
                             }
-                                }
-                            });
+                        }
+                    });
 
-                    db.collection("users").document(userUID)
-                            .update("wallet", wallet + valueOfGig)
-                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    Log.d(TAG, "You successfully updated your wallet!");
-
-                                    Toast.makeText(Description.this, "You successfully updated your wallet.",
-                                            Toast.LENGTH_SHORT).show();
-
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Log.w(TAG, "Error writing document", e);
-                                    Toast.makeText(Description.this, "Error writing document [wallet].",
-                                            Toast.LENGTH_SHORT).show();
-                                }
-                            });
 
                     db.collection("gigs").document(documentID)
                             .update("completed", true)
@@ -196,6 +179,7 @@ public class Description extends AppCompatActivity {
                                     Log.w(TAG, "Error writing document", e);
                                 }
                             });
+
                 }
             }
         });
@@ -247,6 +231,31 @@ public class Description extends AppCompatActivity {
                 }
                 }
             });
+    }
+
+    public void updateWallet(int gigValue, int wallet, String userUID) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection("users").document(userUID)
+                .update("wallet", wallet + gigValue)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "You successfully updated your wallet!");
+
+                        Toast.makeText(Description.this, "You successfully updated your wallet.",
+                                Toast.LENGTH_SHORT).show();
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error writing document", e);
+                        Toast.makeText(Description.this, "Error writing document [wallet].",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 }
 
