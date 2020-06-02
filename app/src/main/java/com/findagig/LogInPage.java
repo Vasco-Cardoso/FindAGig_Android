@@ -73,6 +73,7 @@ public class LogInPage extends AppCompatActivity {
                 }
             });
         // [END sign_in_with_email]
+
     }
 
     public void onClick(View view) {

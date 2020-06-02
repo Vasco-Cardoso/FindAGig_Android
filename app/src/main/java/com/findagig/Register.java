@@ -58,7 +58,16 @@ public class Register extends AppCompatActivity {
                         && register_pass.getText().toString() != null
                         && register_pass.getText().toString().length() > 6)
                 {
-                    registerUser();
+                    boolean result_from_register = Services.registerUser(register_mail.getText().toString() , register_pass.getText().toString());
+                    if (result_from_register) {
+                        Toast.makeText(Register.this, "Register success.",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        Toast.makeText(Register.this, "Failed register.",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                    //registerUser();
                 }
                 else {
                     Toast.makeText(Register.this, "Check your parameters.",

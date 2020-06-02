@@ -1,5 +1,6 @@
 package com.findagig.ui.menu;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.findagig.GlideApp;
 import com.findagig.R;
+import com.findagig.SettingsPage;
 import com.findagig.ui.recyclercardview.Model;
 import com.findagig.ui.recyclercardview.ModelForMenu;
 import com.findagig.ui.recyclercardview.MyAdapter;
@@ -80,6 +82,14 @@ public class MenuFragment extends Fragment {
         mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         myAdapter = new MyAdapterMenu(this.getContext(), getMyList());
         mRecyclerView.setAdapter(myAdapter);
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), SettingsPage.class);
+                startActivity(intent);
+            }
+        });
 
         return rootView;
     }

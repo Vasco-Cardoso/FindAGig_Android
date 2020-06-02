@@ -64,6 +64,7 @@ public class SettingsPage extends AppCompatActivity {
     EditText email_et;
     EditText password_et;
     EditText username_et;
+    ImageView imageView_settings;
     Button saveButton;
 
     // Firebase variables
@@ -78,7 +79,6 @@ public class SettingsPage extends AppCompatActivity {
     private String name;
     private String wallet;
     private String userUID;
-    ImageView imageView;
 
     // Photo variables
     String currentPhotoPath;
@@ -127,7 +127,6 @@ public class SettingsPage extends AppCompatActivity {
             @Override
             public void onSuccess(Uri uri) {
                 Log.d(TAG, "File exists");
-
                 loadImage();
 
             }
@@ -150,12 +149,12 @@ public class SettingsPage extends AppCompatActivity {
         Log.d(TAG, "Image path: " + pathReference.toString());
         StorageReference ref = FirebaseStorage.getInstance().getReferenceFromUrl(pathReference.toString());
 
-        imageView = findViewById(R.id.imageView_settings);
+        imageView_settings = findViewById(R.id.imageView_settings);
 
         // Load the image using Glide
         GlideApp.with(this)
                 .load(pathReference)
-                .into(imageView);
+                .into(imageView_settings);
     }
 
     private void getUserInfo(final String userUID) {
@@ -195,8 +194,12 @@ public class SettingsPage extends AppCompatActivity {
 
     private void askCameraPermissions() {
         if(ContextCompat.checkSelfPermission(this,Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+            Log.d(TAG, "I do not have permissions");
+
             ActivityCompat.requestPermissions(this,new String[] {Manifest.permission.CAMERA}, CAMERA_PERM_CODE);
         }else {
+            Log.d(TAG, "I have permissions");
+
             dispatchTakePictureIntent();
         }
     }
@@ -214,40 +217,27 @@ public class SettingsPage extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if(requestCode == CAMERA_REQUEST_CODE){
+        Log.d(TAG, "ON ACTIVITY RESULT");
+
+        if(requestCode == 1 ){
+            Log.d(TAG, "CAMERA_REQUEST_CODE");
+
             if(resultCode == Activity.RESULT_OK){
+                Log.d(TAG, "ok");
+
                 File f = new File(currentPhotoPath);
-                imageView.setImageURI(Uri.fromFile(f));
-                Log.d("tag", "ABsolute Url of Image is " + Uri.fromFile(f));
+                imageView_settings = findViewById(R.id.imageView_settings);
+
+                imageView_settings.setImageURI(Uri.fromFile(f));
+                Log.d(TAG, "Absolute Url of Image is " + Uri.fromFile(f));
 
                 Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
                 Uri contentUri = Uri.fromFile(f);
                 mediaScanIntent.setData(contentUri);
                 this.sendBroadcast(mediaScanIntent);
-
-                uploadImageToFirebase(f.getName(),contentUri);
-
-
-
+                //uploadImageToFirebase(f.getName(),contentUri);
             }
-
         }
-
-        if(requestCode == GALLERY_REQUEST_CODE){
-            if(resultCode == Activity.RESULT_OK){
-                Uri contentUri = data.getData();
-                String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-                String imageFileName = "JPEG_" + timeStamp +"."+getFileExt(contentUri);
-                Log.d("tag", "onActivityResult: Gallery Image Uri:  " +  imageFileName);
-                imageView.setImageURI(contentUri);
-
-                uploadImageToFirebase(imageFileName,contentUri);
-
-
-            }
-
-        }
-
 
     }
 
@@ -284,8 +274,7 @@ public class SettingsPage extends AppCompatActivity {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
-//        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
                 imageFileName,  /* prefix */
                 ".jpg",         /* suffix */
@@ -297,7 +286,10 @@ public class SettingsPage extends AppCompatActivity {
         return image;
     }
 
+    static final int REQUEST_TAKE_PHOTO = 1;
+
     private void dispatchTakePictureIntent() {
+        Log.d(TAG, "Entered dispatchTakePictureIntent");
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
@@ -305,21 +297,30 @@ public class SettingsPage extends AppCompatActivity {
             File photoFile = null;
             try {
                 photoFile = createImageFile();
-            } catch (IOException ex) {
+                Log.d(TAG, "Created image file");
 
+            } catch (IOException ex) {
+                // Error occurred while creating the File
             }
             // Continue only if the File was successfully created
             if (photoFile != null) {
+                Log.d(TAG, "Entered photo!=null");
+
                 Uri photoURI = FileProvider.getUriForFile(this,
                         "com.findagig",
                         photoFile);
+
+                Log.d(TAG, "=>  ---" + photoURI.toString());
+
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                startActivityForResult(takePictureIntent, CAMERA_REQUEST_CODE);
+                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
             }
         }
     }
 
+
     public void clickCamera(View view) {
+        Log.d(TAG, "Clicked camera icon.");
         askCameraPermissions();
     }
 
