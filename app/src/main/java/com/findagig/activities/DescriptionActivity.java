@@ -1,14 +1,9 @@
-package com.findagig;
+package com.findagig.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.content.res.Configuration;
-import android.content.res.Resources;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,7 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.findagig.ui.recyclercardview.Model;
+import com.findagig.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -27,7 +22,7 @@ import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-public class Description extends AppCompatActivity {
+public class DescriptionActivity extends AppCompatActivity {
     private static final String TAG = "Description";
     private String documentID = null;
     private int wallet = 0;
@@ -127,7 +122,7 @@ public class Description extends AppCompatActivity {
                                 public void onSuccess(Void aVoid) {
                                     Log.d(TAG, "DocumentSnapshot successfully written!");
 
-                                    Toast.makeText(Description.this, "You successfully applied to the job.",
+                                    Toast.makeText(DescriptionActivity.this, "You successfully applied to the job.",
                                             Toast.LENGTH_SHORT).show();
 
                                 }
@@ -136,7 +131,7 @@ public class Description extends AppCompatActivity {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
                                     Log.w(TAG, "Error writing document", e);
-                                    Toast.makeText(Description.this, "Error writing document.",
+                                    Toast.makeText(DescriptionActivity.this, "Error writing document.",
                                             Toast.LENGTH_SHORT).show();
                                 }
                             });
@@ -150,7 +145,7 @@ public class Description extends AppCompatActivity {
                                 public void onSuccess(Void aVoid) {
                                     Log.d(TAG, "DocumentSnapshot successfully written!");
 
-                                    Toast.makeText(Description.this, "You successfully applied to the job.",
+                                    Toast.makeText(DescriptionActivity.this, "You successfully applied to the job.",
                                             Toast.LENGTH_SHORT).show();
 
                                 }
@@ -159,7 +154,7 @@ public class Description extends AppCompatActivity {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
                                     Log.w(TAG, "Error writing document", e);
-                                    Toast.makeText(Description.this, "Error writing document.",
+                                    Toast.makeText(DescriptionActivity.this, "Error writing document.",
                                             Toast.LENGTH_SHORT).show();
                                 }
                             });
@@ -243,7 +238,7 @@ public class Description extends AppCompatActivity {
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "You successfully updated your wallet!");
 
-                        Toast.makeText(Description.this, "You successfully updated your wallet.",
+                        Toast.makeText(DescriptionActivity.this, "You successfully updated your wallet.",
                                 Toast.LENGTH_SHORT).show();
 
                     }
@@ -252,7 +247,7 @@ public class Description extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.w(TAG, "Error writing document", e);
-                        Toast.makeText(Description.this, "Error writing document [wallet].",
+                        Toast.makeText(DescriptionActivity.this, "Error writing document [wallet].",
                                 Toast.LENGTH_SHORT).show();
                     }
                 });

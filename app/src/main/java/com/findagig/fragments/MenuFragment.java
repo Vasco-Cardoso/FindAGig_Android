@@ -1,4 +1,4 @@
-package com.findagig.ui.menu;
+package com.findagig.fragments;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -20,10 +20,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.findagig.GlideApp;
 import com.findagig.R;
-import com.findagig.SettingsPage;
-import com.findagig.ui.recyclercardview.Model;
+import com.findagig.activities.SettingsPageActivity;
 import com.findagig.ui.recyclercardview.ModelForMenu;
-import com.findagig.ui.recyclercardview.MyAdapter;
 import com.findagig.ui.recyclercardview.MyAdapterMenu;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -98,7 +96,7 @@ public class MenuFragment extends Fragment {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), SettingsPage.class);
+                Intent intent = new Intent(getContext(), SettingsPageActivity.class);
                 startActivity(intent);
             }
         });

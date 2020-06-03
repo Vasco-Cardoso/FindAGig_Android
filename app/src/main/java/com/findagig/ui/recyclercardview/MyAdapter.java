@@ -2,7 +2,6 @@ package com.findagig.ui.recyclercardview;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,12 +10,12 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.findagig.AllGigs;
-import com.findagig.Description;
-import com.findagig.LogInPage;
-import com.findagig.MapsActivity;
+import com.findagig.activities.AllGigsActivity;
+import com.findagig.activities.DescriptionActivity;
+import com.findagig.activities.LogInPageActivity;
+import com.findagig.activities.MapsActivity;
 import com.findagig.R;
-import com.findagig.SettingsPage;
+import com.findagig.activities.SettingsPageActivity;
 import com.findagig.ui.QRCode.QRCode;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -63,7 +62,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyHolder> {
 
                 if (gTitle.equals("All gigs"))
                 {
-                    Intent intent = new Intent(c, AllGigs.class);
+                    Intent intent = new Intent(c, AllGigsActivity.class);
                     c.startActivity(intent);
                 }
                 else if (gTitle.equals("Map"))
@@ -82,14 +81,14 @@ public class MyAdapter extends RecyclerView.Adapter<MyHolder> {
                     c.startActivity(intent);
                 }
                 else if(gTitle.equals("Settings")) {
-                    Intent intent = new Intent(c, SettingsPage.class);
+                    Intent intent = new Intent(c, SettingsPageActivity.class);
                     c.startActivity(intent);
                 }
                 else if (gTitle.equals("Logout"))
                 {
                     FirebaseAuth mAuth = FirebaseAuth.getInstance();
                     mAuth.signOut();
-                    Intent intent = new Intent(c, LogInPage.class);
+                    Intent intent = new Intent(c, LogInPageActivity.class);
                     c.startActivity(intent);
                 }
                 else {
@@ -116,7 +115,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyHolder> {
                         if(document.getData().get("name").toString().equals(gTitle)) {
                             id[0] = document.getId();
 
-                            Intent intent = new Intent(c, Description.class);
+                            Intent intent = new Intent(c, DescriptionActivity.class);
                             intent.putExtra("id", id[0]);
                             c.startActivity(intent);
 

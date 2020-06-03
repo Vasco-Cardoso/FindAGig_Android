@@ -1,23 +1,19 @@
-package com.findagig;
+package com.findagig.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 
-import com.findagig.ui.history.HistoryFragment;
-import com.findagig.ui.home.HomeFragment;
-import com.findagig.ui.menu.MenuFragment;
+import com.findagig.R;
+import com.findagig.fragments.HistoryFragment;
+import com.findagig.fragments.HomeFragment;
+import com.findagig.fragments.MenuFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.auth.FirebaseAuth;
 
-public class MainMenu extends AppCompatActivity {
+public class MainMenuActivity extends AppCompatActivity {
 
 
     @Override

@@ -1,4 +1,4 @@
-package com.findagig;
+package com.findagig.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,9 +6,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import com.findagig.R;
 import com.findagig.ui.QRCode.QRCode;
 
-public class WithdrawCredits extends AppCompatActivity {
+public class WithdrawCreditsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

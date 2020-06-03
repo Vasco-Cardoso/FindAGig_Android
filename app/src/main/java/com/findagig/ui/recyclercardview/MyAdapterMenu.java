@@ -9,13 +9,13 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.findagig.AllGigs;
-import com.findagig.Description;
-import com.findagig.LogInPage;
-import com.findagig.MapsActivity;
+import com.findagig.activities.AllGigsActivity;
+import com.findagig.activities.DescriptionActivity;
+import com.findagig.activities.LogInPageActivity;
+import com.findagig.activities.MapsActivity;
 import com.findagig.R;
-import com.findagig.SettingsPage;
-import com.findagig.WithdrawCredits;
+import com.findagig.activities.SettingsPageActivity;
+import com.findagig.activities.WithdrawCreditsActivity;
 import com.findagig.ui.QRCode.QRCode;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -53,7 +53,7 @@ public class MyAdapterMenu extends RecyclerView.Adapter<MyHolderMenu> {
                 String gTitle = models.get(position).getTitle();
 
                 if(gTitle.equals("Settings")) {
-                    Intent intent = new Intent(c, SettingsPage.class);
+                    Intent intent = new Intent(c, SettingsPageActivity.class);
                     c.startActivity(intent);
                 }
                 else if (gTitle.equals("QRCode"))
@@ -66,7 +66,7 @@ public class MyAdapterMenu extends RecyclerView.Adapter<MyHolderMenu> {
                     FirebaseAuth mAuth = FirebaseAuth.getInstance();
                     mAuth.signOut();
 
-                    Intent intent = new Intent(c, LogInPage.class);
+                    Intent intent = new Intent(c, LogInPageActivity.class);
                     c.startActivity(intent);
                 }
                 else if (gTitle.equals("Map"))
@@ -77,15 +77,15 @@ public class MyAdapterMenu extends RecyclerView.Adapter<MyHolderMenu> {
                 }
                 else if (gTitle.equals("All gigs"))
                 {
-                    Intent intent = new Intent(c, AllGigs.class);
+                    Intent intent = new Intent(c, AllGigsActivity.class);
                     c.startActivity(intent);
                 }
                 else if(gTitle.equals("Withdraw")) {
-                    Intent intent = new Intent(c, WithdrawCredits.class);
+                    Intent intent = new Intent(c, WithdrawCreditsActivity.class);
                     c.startActivity(intent);
                 }
                 else {
-                    Intent intent = new Intent(c, Description.class);
+                    Intent intent = new Intent(c, DescriptionActivity.class);
                     intent.putExtra("id", gTitle);
                     c.startActivity(intent);
                 }

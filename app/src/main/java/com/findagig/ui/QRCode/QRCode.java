@@ -15,7 +15,7 @@ import android.view.SurfaceView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.findagig.Description;
+import com.findagig.activities.DescriptionActivity;
 import com.findagig.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -125,7 +125,7 @@ public class QRCode extends AppCompatActivity {
 
                 }
                 else {
-                    Intent intent = new Intent(QRCode.this, Description.class);
+                    Intent intent = new Intent(QRCode.this, DescriptionActivity.class);
                     intent.putExtra("id", barcodes.valueAt(0).displayValue);
                     startActivity(intent);
                 }

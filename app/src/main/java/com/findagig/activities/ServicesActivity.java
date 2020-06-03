@@ -1,4 +1,4 @@
-package com.findagig;
+package com.findagig.activities;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -23,7 +23,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Services {
+public class ServicesActivity {
     private static final String TAG = "Services";
     private FirebaseAuth mAuth;
 

@@ -1,4 +1,4 @@
-package com.findagig.ui.history;
+package com.findagig.fragments;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;

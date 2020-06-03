@@ -1,4 +1,4 @@
-package com.findagig;
+package com.findagig.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,14 +12,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.findagig.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -29,7 +28,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Register extends AppCompatActivity {
+public class RegisterActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private static final String TAG = "Register";
 
@@ -61,7 +60,7 @@ public class Register extends AppCompatActivity {
                     registerUser();
                 }
                 else {
-                    Toast.makeText(Register.this, "Check your parameters.",
+                    Toast.makeText(RegisterActivity.this, "Check your parameters.",
                             Toast.LENGTH_SHORT).show();
                 }
 
@@ -76,12 +75,12 @@ public class Register extends AppCompatActivity {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if(task.isSuccessful()) {
-                        Toast.makeText(Register.this, "Register success.",
+                        Toast.makeText(RegisterActivity.this, "Register success.",
                                 Toast.LENGTH_SHORT).show();
                         logInUser();
                     }
                     else {
-                        Toast.makeText(Register.this, "Register failed.",
+                        Toast.makeText(RegisterActivity.this, "Register failed.",
                                 Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -97,14 +96,14 @@ public class Register extends AppCompatActivity {
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
-                        Toast.makeText(Register.this, "Authentication success.",
+                        Toast.makeText(RegisterActivity.this, "Authentication success.",
                                 Toast.LENGTH_SHORT).show();
 
                         addUserRegistry(register_mail.getText().toString(), register_pass.getText().toString(), register_user_name.getText().toString());
 
                     } else {
                         // If sign in fails, display a message to the user.
-                        Toast.makeText(Register.this, "Authentication failed.",
+                        Toast.makeText(RegisterActivity.this, "Authentication failed.",
                                 Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -131,7 +130,7 @@ public class Register extends AppCompatActivity {
                 public void onSuccess(Void aVoid) {
                     Log.d(TAG, "DocumentSnapshot successfully written!");
 
-                    Intent i = new Intent(getApplicationContext(), MainMenu.class);
+                    Intent i = new Intent(getApplicationContext(), MainMenuActivity.class);
                     startActivity(i);
                 }
             })

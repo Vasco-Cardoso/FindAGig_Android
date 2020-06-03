@@ -1,4 +1,4 @@
-package com.findagig;
+package com.findagig.ui.image_utiles;
 
 import android.content.Context;
 

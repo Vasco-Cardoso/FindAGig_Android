@@ -1,4 +1,4 @@
-package com.findagig;
+package com.findagig.activities;
 
 import android.Manifest;
 import android.app.Activity;
@@ -6,11 +6,11 @@ import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 
-import com.bumptech.glide.Glide;
+import com.findagig.GlideApp;
+import com.findagig.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -20,7 +20,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageException;
 import com.google.firebase.storage.StorageReference;
 
 import androidx.annotation.NonNull;
@@ -46,13 +45,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
-import com.findagig.MyAppGlideModule;
 import com.google.firebase.storage.UploadTask;
 
 
-public class SettingsPage extends AppCompatActivity {
+public class SettingsPageActivity extends AppCompatActivity {
     // CODES
     public static final int CAMERA_PERM_CODE = 101;
     public static final int CAMERA_REQUEST_CODE = 102;
@@ -255,12 +252,12 @@ public class SettingsPage extends AppCompatActivity {
                     }
                 });
 
-                Toast.makeText(SettingsPage.this, "Image Is Uploaded.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SettingsPageActivity.this, "Image Is Uploaded.", Toast.LENGTH_SHORT).show();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(SettingsPage.this, "Upload Failled.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SettingsPageActivity.this, "Upload Failled.", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -343,7 +340,7 @@ public class SettingsPage extends AppCompatActivity {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "DocumentSnapshot successfully written!");
-                        Toast.makeText(SettingsPage.this, "User information was updated.",
+                        Toast.makeText(SettingsPageActivity.this, "User information was updated.",
                                 Toast.LENGTH_SHORT).show();
 
                     }
@@ -352,7 +349,7 @@ public class SettingsPage extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.w(TAG, "Error writing document", e);
-                        Toast.makeText(SettingsPage.this, "User information was not updated, check you connection!",
+                        Toast.makeText(SettingsPageActivity.this, "User information was not updated, check you connection!",
                                 Toast.LENGTH_SHORT).show();
                     }
                 });

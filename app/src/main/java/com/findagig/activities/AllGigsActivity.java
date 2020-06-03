@@ -1,4 +1,4 @@
-package com.findagig;
+package com.findagig.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.findagig.R;
 import com.findagig.ui.recyclercardview.Model;
 import com.findagig.ui.recyclercardview.MyAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -24,7 +25,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class AllGigs extends AppCompatActivity {
+public class AllGigsActivity extends AppCompatActivity {
     private static final String TAG = "allGigs";
     RecyclerView mRecyclerView;
     MyAdapter myAdapter;

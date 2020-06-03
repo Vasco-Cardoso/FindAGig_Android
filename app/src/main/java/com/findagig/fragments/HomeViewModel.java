@@ -1,4 +1,4 @@
-package com.findagig.ui.home;
+package com.findagig.fragments;
 
 
 import androidx.lifecycle.LiveData;
